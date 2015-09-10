@@ -112,16 +112,19 @@ var NestedVerticalContainer = React.createClass
 var MainVerticalContainer = React.createClass
 (
 	{
+	//justifyContent:'center ',
+						
 		render: function() 
 		{
 			return (
 					<div style={{
 						height:'100%',
+						width:'100%',
 						overflow:'hidden',
 						display:'flex',
 						flexWrap: 'wrap',
 						flexDirection:'column',
-						justifyContent:'center ',
+						alignItems: 'stretch',
 						backgroundColor:'rgba(255, 0, 0, 0.2)'}}>
 			
 						<div style={{flex:'none', height:50}}>
@@ -134,15 +137,15 @@ var MainVerticalContainer = React.createClass
 						
 						<NestedHorizontalContainer/>
 												
-						<div style={{flex:'auto', height:50}}>
+						<div style={{flex:'none', height:50}}>
 							Some text
 						</div>
 						
 						<NestedVerticalContainer/>
 						
 						
-						<div style={{flex:'none', height:50}}>
-							Some text
+						<div style={{flex:'none', margin:'auto', height:50}}>
+							Some text 123
 						</div>
 						
 					</div>
@@ -157,15 +160,28 @@ var MyApplication = React.createClass
 		render: function() 
 		{
 			return (
+					
 					<div style={{
-						position:'absolute',
-						left:30,
- 						top:30,
-						bottom:30,
-						overflow:'hidden',
-						}}>
+						display:'flex',
+						flexWrap: 'wrap',
+						flexDirection:'column',
+						backgroundColor:'rgba(255, 0, 0, 0.2)'}}>
 			
-						<MainVerticalContainer/>
+						<div style={{flex:'none', height:50}}>
+							Some text
+						</div>
+						
+						<div style={{flex:'none', height:50}}>
+							Some text
+						</div>
+						
+											
+						<div style={{flex:'none', height:50}}>
+							Some text
+						</div>
+						
+				
+						
 					</div>
 				);
 		}

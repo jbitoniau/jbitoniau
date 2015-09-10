@@ -1,0 +1,148 @@
+<html>
+	<head>
+		<title>test</title>
+		<link rel="stylesheet" type="text/css" href="CustomInputRange.css">
+<!--		<link rel="stylesheet" type="text/css" href="CustomInputCheckbox.css">-->
+		<style>
+		/*	div 
+			{
+				border:1px dotted grey;
+				//background-color: rgba(255,0,0,0.4);
+			}	
+*/
+			.mainDialog
+			{
+				background-color: rgb(32,79,107);
+				border-radius:20px;
+			}
+			
+			.dialogSection
+			{
+				background-color: rgba(255,255,255,0.15);
+				width:100%;
+			}
+			
+			.regularText
+			{
+				color:white; 
+				font-family: Arial, Helvetica, sans-serif; 
+				font-size:18px;
+			}
+			
+			.tagText
+			{
+				color:white; 
+				font-family: Arial, Helvetica, sans-serif; 
+				font-size:18px;
+				
+				background-color:red;
+				box-shadow: 3px 3px 4px black; 
+				padding:4px; 
+				border-radius:7px;
+			}
+			
+			/*progress
+			{
+				// http://www.hongkiat.com/blog/html5-progress-bar/
+				background-color: #f3f3f3;
+				border: 0;
+				height: 18px;
+				border-radius: 9px;
+			}*/
+			
+			input[type=number]
+			{	
+				width: 40px;
+				color:white; 
+				font-family: Arial, Helvetica, sans-serif; 
+				font-size:18px;
+				
+				background-color: rgba(0,0,0,0.2);
+				border: solid 1px white;
+				height: 22px;
+				
+				-moz-appearance: textfield;		/* on Firefox, removes the spinner which are always there by default */
+			}
+			
+			input[type=number]:focus
+			{
+				-moz-appearance: spinner;		/* on Firefox, brings the spinner buttons back */
+			}
+			
+			/*input[type="number"]::-webkit-outer-spin-button,
+			input[type="number"]::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}*/
+			
+		</style>
+		
+	</head>
+	
+	<body style="overflow:hidden;background-color: rgb(220,220,220);">
+			
+		<div id='mainDiv' 
+			class="mainDialog"
+			style="
+				position:absolute;
+				top:10px;
+				left:10px;
+				width:500px;
+				height:500px;
+				
+				overflow:hidden;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				align-items: flex-start;
+				flex-wrap: nowrap;">
+				
+				<div style="flex:none;color:white; ;
+					font-family: Lucida Console, Monospace;
+					font-size:40px">
+						<b>OBJECT PROPERTIES</b>
+				</div>
+				
+				<img src="ObjectIcon.png" style="flex:none;"/>
+					
+				<div class="regularText" style="flex:none">
+					<input type="checkbox" name="choix1" value="1">Collision</input>
+				</div>
+								
+				</br>
+				
+				<div class="dialogSection">
+				
+					<div class="regularText">&#9660;</div>
+					
+					<div class="tagText" style="flex:none;">
+						Jump to kill
+					</div>
+					
+					<div class="regularText" style="flex:none;">
+						Speed
+					</div>
+					
+					<input  type="range" value="10" max="100" value="50"></input>
+					
+					<input  type="number" value="10" max="100" value="50"></input>
+									
+				</div>
+				
+				</br>
+				
+				<div style="flex:none; width:200px; height:100px">Some text2</div>
+				<div style="flex:none; width:200px; height:100px">Some text4</div>
+				<div style="flex:none; width:200px; height:100px">Some text5</div>
+				<div style="flex:none; width:200px; height:100px">Some text6</div>
+		</div>
+    	
+	</body>
+	
+	<script>
+		
+	</script>
+	
+</html>
+
+	
