@@ -5,7 +5,9 @@
 // Basically an expanding flex child that wants to lay itself out (and its children) precisely 
 // withing the space given to it by the flex container needs to do extra stuff that's not trivial.
 // Otherwise, it might work in some browsers, but not others
-
+// 
+// Well, actually after investigating this a bit more, the solution taken from Stackoverflow below
+// is not great. It can be done with regular flexbox stuff!
 var MyApplication = React.createClass
 (
 	{
