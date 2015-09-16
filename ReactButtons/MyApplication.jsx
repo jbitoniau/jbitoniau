@@ -38,35 +38,46 @@ var MyButton = React.createClass
 		
 		render: function()
 		{
-	//console.log("s= " + this.state.enabledState );
+//console.log("s= " + this.state.enabledState );
 	
-	var image = this.props.image;
+			var image = this.props.image;
 			var w = 64;
 			var h = 64;
 			
-			var style = null;
+
+			// Main image
+			var mainImageStyle = null;
 			if ( this.props.enabled )
-				style = MyButtonStyles[this.state.enabledState];
+				mainImageStyle = MyButtonStyles['mainImage_' + this.state.enabledState];
 			else
-				style = MyButtonStyles['disabled'];
-			
-			var commonStyle = {
-					WebkitUserSelect:'none',
-					MozUserSelect: '-moz-none',
-					msUserSelect: 'none',
-					userSelect: 'none',
-				};
-			Object.assign( style, commonStyle );
-			
+				mainImageStyle = MyButtonStyles['mainImage_' + 'disabled'];
+			Object.assign( mainImageStyle, MyButtonStyles['common']);
+
+			// Hover image
 			var hoverImage = this.props.hoverImage;
 			var hoverImageOpacity = 0;
-			if ( this.state.enabledState=='hover' )
+			var hoverImageStyle = {};
+			Object.assign( hoverImageStyle, MyButtonStyles['common']);
+			if ( this.props.enabled && this.state.enabledState=='hover' )
+			{
 				hoverImageOpacity = this.props.hoverImageOpacity;
+				Object.assign( hoverImageStyle, MyButtonStyles['hoverImage'] );
+			}
+			hoverImageStyle['filter'] = 'opacity(' + hoverImageOpacity + ')';
+			hoverImageStyle['WebkitFilter'] = 'opacity(' + hoverImageOpacity + ')';
 			
+			// Active image
 			var activeImage = this.props.activeImage;
 			var activeImageOpacity = 0;
-			if ( this.state.enabledState=='active' )
+			var activeImageStyle = {};
+			Object.assign( activeImageStyle, MyButtonStyles['common']);
+			if ( this.props.enabled && this.state.enabledState=='active' )
+			{
 				activeImageOpacity = this.props.activeImageOpacity;
+				Object.assign( activeImageStyle, MyButtonStyles['activeImage'] );
+			}
+			activeImageStyle['filter'] = 'opacity(' + activeImageOpacity + ')';
+			activeImageStyle['WebkitFilter'] = 'opacity(' + activeImageOpacity + ')';
 						
 			return ( 
 					<div style={{flex:'none', position:'relative', width:w, height:h}}
@@ -80,7 +91,7 @@ var MyButton = React.createClass
 						<div style={{position:'absolute', top:0, left:0, zIndex:5}}>
 							<img 	src={image}
 									onDragStart={this.onDragStart}
-									style={style}
+									style={mainImageStyle}
 									width={w} 
 									height={h}
 									ref='mainDiv'
@@ -93,9 +104,20 @@ var MyButton = React.createClass
 								<div style={{position:'absolute', top:0, left:0, zIndex:17}}>
 									<img 	src={hoverImage}
 											onDragStart={this.onDragStart}
-											style={{
-												filter:'opacity(' + hoverImageOpacity + ')', 
-												WebkitFilter:'opacity(' + hoverImageOpacity + ')' }}
+											style={hoverImageStyle}
+											width={w} 
+											height={h}/>
+								</div>
+							:
+								null
+						}
+						
+						{
+							activeImage ?
+								<div style={{position:'absolute', top:0, left:0, zIndex:17}}>
+									<img 	src={activeImage}
+											onDragStart={this.onDragStart}
+											style={activeImageStyle}
 											width={w} 
 											height={h}/>
 								</div>
@@ -103,20 +125,7 @@ var MyButton = React.createClass
 								null
 						}
 							
-						{
-							activeImage ?
-								<div style={{position:'absolute', top:0, left:0, zIndex:17}}>
-									<img 	src={activeImage}
-											onDragStart={this.onDragStart}
-											style={{
-												filter:'opacity(' + activeImageOpacity + ')', 
-												WebkitFilter:'opacity(' + activeImageOpacity + ')' }}
-											width={w} 
-											height={h}/>
-								</div>
-							:
-								null
-						}
+					
 					</div>
 				);
 				
@@ -198,29 +207,51 @@ console.log("onMouseUp");		},
 
 var MyButtonStyles = 
 {
-	normal: 
+	common:
+	{
+		WebkitUserSelect:'none',
+		MozUserSelect: '-moz-none',
+		msUserSelect: 'none',
+		userSelect: 'none',
+	},
+
+	mainImage_normal: 
 	{
 		//backgroundColor:'rgba(255,0,255,0.1)',
 	},
 	
-	hover: 
+	mainImage_hover: 
 	{
 		//backgroundColor:'rgba(255,0,0,0.3)',
 	},
 	
-	active:
+	mainImage_active:
 	{
 		//backgroundColor:'rgba(255,0,0,0.8)',
+		position:'relative',
 		top:1,
 		left:1
 	},
-
-	disabled:
+	
+	mainImage_disabled:
 	{
 		//backgroundColor:'rgba(128,128,128,0.5)',
 		WebkitFilter: 'opacity(0.3)',
 		filter: 'opacity(0.3)'
-	}	
+	},
+	
+	hoverImage:
+	{
+	},
+	
+	activeImage:
+	{
+		position:'relative',
+		top:1,
+		left:1
+	},
+	
+	
 };
 
 var MyApplication = React.createClass
@@ -262,11 +293,10 @@ var MyApplication = React.createClass
 
 							}}>
 							
-							<MyButton image='ToolAddVoxel.png'/>
 							<MyButton image='ToolAddVoxel.png' enabled={false}/>
 							<MyButton image='ToolAddVoxel.png' 
 								hoverImage='ButtonMask.png' hoverImageOpacity={0.2}
-								activeImage='ButtonMask.png' activeImageOpacity={0.7}/>
+								activeImage='ButtonMask2.png' activeImageOpacity={0.7}/>
 						</div>
 						
 					</div>
