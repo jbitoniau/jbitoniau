@@ -43,7 +43,6 @@ var MyButton = React.createClass
 			var image = this.props.image;
 			var w = 64;
 			var h = 64;
-			
 
 			// Main image
 			var mainImageStyle = null;
@@ -86,6 +85,8 @@ var MyButton = React.createClass
 									onClick={this.onButtonClick}
 									onMouseOver={this.onMouseOver}
 									onMouseOut={this.onMouseOut}
+									onTouchStart={this.onMouseDown}
+									onTouchEnd={this.onMouseUp}
 									>
 									
 						<div style={{position:'absolute', top:0, left:0, zIndex:5}}>
