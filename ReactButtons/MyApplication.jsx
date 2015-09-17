@@ -7,6 +7,8 @@ var MyButton = React.createClass
 	{
 		propTypes: 
 		{
+			width: React.PropTypes.number.isRequired,
+			height: React.PropTypes.number.isRequired,
 			enabled: React.PropTypes.bool,
 			image: React.PropTypes.string.isRequired,
 			hoverImage: React.PropTypes.string,
@@ -18,6 +20,8 @@ var MyButton = React.createClass
 		getDefaultProps: function()
 		{
 			return { 
+				width:32,
+				height:32,
 				enabled:true,
 				image:null,
 				hoverImage:null,
@@ -41,8 +45,8 @@ var MyButton = React.createClass
 //console.log("s= " + this.state.enabledState );
 	
 			var image = this.props.image;
-			var w = 64;
-			var h = 64;
+			var w = this.props.width;
+			var h = this.props.height;
 
 			// Main image
 			var mainImageStyle = null;
@@ -142,7 +146,7 @@ var MyButton = React.createClass
 				
 		onMouseOver: function(e)
 		{
-		console.log("onMouseOver " + e.currentTarget + " " + e.target.src);		
+			//console.log("onMouseOver " + e.currentTarget + " " + e.target.src);		
 			if ( this.state.state=='disabled' )
 				return;	
 		
@@ -160,8 +164,8 @@ var MyButton = React.createClass
 		
 		onMouseOut: function(e)
 		{
-	console.log("onMouseOut " + e.currentTarget + " " + e.target.src);		
-					if ( this.state.state=='disabled' )
+			//console.log("onMouseOut " + e.currentTarget + " " + e.target.src);		
+			if ( this.state.state=='disabled' )
 				return;	
 				
 		/*	var mainDiv = React.findDOMNode(this.refs.mainDiv);
@@ -258,8 +262,26 @@ var MyButtonStyles =
 var MyApplication = React.createClass
 (
 	{
+		componentDidMount: function()
+		{
+			window.addEventListener('resize', 
+					function(e)
+					{	
+						this.forceUpdate();
+					}.bind(this)
+				);
+		},
+	
 		render: function() 
 		{
+			var layoutType = this._getLayoutType( window.innerWidth, window.innerHeight );
+			
+			var buttonSize = 64;
+			if ( layoutType=='small' )
+				buttonSize = 48;
+			else if ( layoutType=='tiny' )
+				buttonSize = 32;
+					
 			return (	
 					<div style={{
 							position:'absolute',
@@ -294,14 +316,44 @@ var MyApplication = React.createClass
 
 							}}>
 							
-							<MyButton image='ToolAddVoxel.png' enabled={false}/>
 							<MyButton image='ToolAddVoxel.png' 
+								width={buttonSize} height={buttonSize}
+								hoverImage='ButtonMask.png' hoverImageOpacity={0.2}
+								activeImage='ButtonMask2.png' activeImageOpacity={0.7}/>
+							<MyButton image='ToolClearVoxel.png' enabled={false}
+								width={buttonSize} height={buttonSize}
+								hoverImage='ButtonMask.png' hoverImageOpacity={0.2}
+								activeImage='ButtonMask2.png' activeImageOpacity={0.7}/>
+							<MyButton image='ToolPaintVoxel.png' 
+								width={buttonSize} height={buttonSize}
 								hoverImage='ButtonMask.png' hoverImageOpacity={0.2}
 								activeImage='ButtonMask2.png' activeImageOpacity={0.7}/>
 						</div>
 						
 					</div>
 				);
+		},
+		
+		
+		_getLayoutType : function( width, height )
+		{
+			// Express the size in landscape mode, so it can be compared
+			// more easily with our template sizes
+			var w = width;
+			var h = height;
+			if ( h>w ) 
+			{
+				w = height;
+				h = width;
+			}
+			
+			if ( w<=512 || h<=360 )
+				return 'tiny';
+			else if ( w<=640 || h<=480 )
+				return 'small';
+			
+			// We could introduce a 'huge' layout for desktop with full HD or UHD screen!
+			return 'normal';
 		},
 		
 		onClick: function()
