@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<title>test</title>
+		<style>
+			div
+			{
+				border:1px dotted grey;
+			}
+			
+			#element1
+			{
+				background-color: rgba(255,0,0,0.4);
+				width:100px;
+				height:100px;
+			}			
+			
+			#element2
+			{
+				background-color: rgba(0,255,0,0.4);
+				width:100px;
+				height:100px;
+			}			
+		</style>
+		
+	</head>
+	
+	<body style="overflow:hidden;">
+		<div id='mainDiv' 
+			style="
+				position:absolute;
+				top:0px;
+				left:0px;
+				bottom:0px;
+				right:0px;
+				
+				margin: 5px;
+				overflow:hidden;
+				background-color: rgba(0,0,255,0.1);
+				
+				display:flex;
+				justify-content:flex-start;
+				align-items:stretch;
+				flex-direction:column;
+				flex-wrap: nowrap;
+					">
+				
+				<!-- the 100px basis works like a charm on Chrome, but not on Firefox -->
+				<div style='flex:1 1 100px;background-color: rgba(0,255,0,0.2);
+					display:flex;
+					justify-content:space-between;
+					align-items:stretch;
+					flex-direction:column;
+					flex-wrap: wrap;'>
+					
+					<div id='element2' style="flex:none">Some text1  aaaaaa </div>
+					<div id='element2' style="flex:none">Some text2  aaaaaa </div>
+					<div id='element2' style="flex:none">Some text3  aaaaaa </div>
+					<div id='element2' style="flex:none">Some text4  aaaaaa </div>
+				</div>
+				
+			
+				<div style='flex:none;;background-color: rgba(0,255,0,0.2);
+					display:flex;
+					justify-content:space-between;
+					align-items:stretch;
+					flex-direction:row;
+					flex-wrap: wrap;'>
+					
+					<div id='element2' style="flex:none">Some text1  aaaaaa </div>
+					<div id='element2' style="flex:none">Some text2  aaaaaa </div>
+					<div id='element2' style="flex:none">Some text3  aaaaaa </div>
+					<div id='element2' style="flex:none">Some text4  aaaaaa </div>
+				</div>
+		</div>
+    	
+	</body>
+	
+	<script>
+		
+	</script>
+	
+</html>
+
+	

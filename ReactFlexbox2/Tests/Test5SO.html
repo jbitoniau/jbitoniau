@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<title>test</title>
+		<style>
+			div 
+			{
+				border:1px dotted grey;
+			}
+			
+			#redBox
+			{
+				background-color: rgba(255,0,0,0.2);
+				width:100px;
+				height:100px;
+			}			
+			
+			#greenBox
+			{
+				background-color: rgba(0,255,0,0.2);
+				width:100px;
+				height:100px;
+			}			
+		</style>
+		
+	</head>
+	
+	<body style="overflow:hidden;">
+		<div 
+			style="position:absolute;
+				top:0px; left:0px; bottom:0px; right:0px;
+				overflow:hidden;
+           
+				display:flex;
+				justify-content:flex-start;
+				align-items:stretch;
+				flex-direction:column;
+				flex-wrap: nowrap;">
+				
+				<div style='flex:auto;background-color:rgba(255,0,0,0.2);
+					display:flex;
+					justify-content:space-between;
+					align-items:stretch;
+					flex-direction:column;
+					flex-wrap: wrap;'>
+					
+					<div id='redBox' style="flex:none">Box 1</div>
+					<div id='redBox' style="flex:none">Box 2</div>
+					<div id='redBox' style="flex:none">Box 3</div>
+				</div>
+				
+			
+				<div style='flex:none;background-color:rgba(0,255,0,0.2);
+					display:flex;
+					justify-content:space-between;
+					align-items:stretch;
+					flex-direction:row;
+					flex-wrap: wrap;'>
+					
+					<div id='greenBox' style="flex:none">Box 5</div>
+					<div id='greenBox' style="flex:none">Box 6</div>
+					<div id='greenBox' style="flex:none">Box 7</div>
+					<div id='greenBox' style="flex:none">Box 8</div>
+					<div id='greenBox' style="flex:none">Box 9</div>
+				</div>
+		</div>
+    	
+	</body>
+	
+	<script>
+		
+	</script>
+	
+</html>
+
+	
