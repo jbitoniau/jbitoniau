@@ -102,20 +102,7 @@ var MyButton = React.createClass
 				mainImageStyle['WebkitFilter'] ='opacity(0.3)';
 				mainImageStyle['filter'] ='opacity(0.3)';
 			}
-						
-						
-			var commonStyle = 
-				{
-					WebkitUserSelect:'none',
-					MozUserSelect: '-moz-none',
-					msUserSelect: 'none',
-					userSelect: 'none',
-				};
-				
-			Object.assign( mainImageStyle, commonStyle);
-			Object.assign( hoverImageStyle, commonStyle);
-			Object.assign( activeImageStyle, commonStyle);
-					
+							
 			var eventHandlers = {
 						onMouseDown: this.onMouseDown,
 						onMouseUp: this.onMouseUp,
@@ -135,8 +122,7 @@ var MyButton = React.createClass
 									style: mainImageStyle, 
 									width: w, 
 									height: h}, 
-									eventHandlers, 
-									{ref: "mainDiv"}))	
+									eventHandlers))	
 						), 
 						
 						
@@ -166,14 +152,6 @@ var MyButton = React.createClass
 				);
 		},
 		
-		onDragStart: function(e)
-		{
-			// Unfortunately the "draggable={false}" attribute on the image doesn't work in Firefox
-			// http://stackoverflow.com/questions/4211909/disable-dragging-an-image-from-an-html-page
-			e.stopPropagation();
-			e.preventDefault();			
-		},
-				
 		onMouseOver: function(e)
 		{
 			//console.log("onMouseOver");
