@@ -6,6 +6,9 @@ var MyButton = React.createClass
 	{
 		propTypes: 
 		{
+			onClick: React.PropTypes.func,			// Only when toggleable is false
+			onToggled: React.PropTypes.func,		// Only when toggleable is true
+			onUntoggled: React.PropTypes.func,		// Only when toggleable is true
 			enabled: React.PropTypes.bool,
 			toggleable: React.PropTypes.bool,
 			
@@ -25,6 +28,9 @@ var MyButton = React.createClass
 		getDefaultProps: function()
 		{
 			return { 
+					onClick: null,
+					onToggled: null,
+					onUntoggled: null,
 					enabled: true,
 					toggleable: false,
 					
@@ -106,11 +112,23 @@ var MyButton = React.createClass
 				mainImageStyle['WebkitFilter'] ='opacity(0.3)';
 				mainImageStyle['filter'] ='opacity(0.3)';
 			}
+				
+			var commonStyle = 
+				{
+					WebkitUserSelect:'none',
+					MozUserSelect: '-moz-none',
+					msUserSelect: 'none',
+					userSelect: 'none',
+				};
+			Object.assign( mainImageStyle, commonStyle);
+			Object.assign( hoverImageStyle, commonStyle);
+			Object.assign( activeImageStyle, commonStyle);
+			
 							
 			var eventHandlers = {
 						onMouseDown: this.onMouseDown,
 						onMouseUp: this.onMouseUp,
-						onClick: this.onButtonClick,
+						//onClick: this.onButtonClick,
 						onMouseEnter: this.onMouseEnter,
 						onMouseLeave: this.onMouseLeave,
 						onTouchStart: this.onMouseDown,
@@ -202,11 +220,25 @@ var MyButton = React.createClass
 			if ( this.props.toggleable )
 			{
 				this.setState( {active:!this.state.active} );
+				if (!this.state.active)
+				{
+					if ( this.props.onToggled )
+						this.props.onToggled(e);
+				}
+				else
+				{
+					if ( this.props.onUntoggled )
+						this.props.onUntoggled(e);
+				}
 			}
 			else
 			{
 				this.setState( {active:true} );
+				if ( this.props.onClick )
+					this.props.onClick(e);
 			}
+			
+			
 		},
 		
 		onMouseUp: function(e)
@@ -229,7 +261,7 @@ var MyButton = React.createClass
 			}
 		},
 				
-		onButtonClick: function(e)
+		/*onButtonClick: function(e)
 		{	
 			e.stopPropagation();
 			e.preventDefault();
@@ -237,6 +269,6 @@ var MyButton = React.createClass
 			// We should generate the click event ourselves! 
 			// We would bypass the 300ms delay that can happen on mobile
 			console.log("button click");
-		},
+		},*/
 	}
 );

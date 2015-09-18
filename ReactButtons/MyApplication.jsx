@@ -68,10 +68,10 @@ var MyApplication = React.createClass
 
 							}}>
 
-							<MyButton image='ToolAddVoxel.png' {...buttonProps} tooltip='Draw new voxels'/>
+							<MyButton image='ToolAddVoxel.png' {...buttonProps} tooltip='Draw new voxels' onClick={this._onAddVoxel}/>
 							<MyButton image='ToolClearVoxel.png' {...buttonProps} tooltip='Clear/erase voxels' enabled={false}/>
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps} tooltip='Paint on existing voxels' />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} toggleable={true}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps} toggleable={true} onToggled={this._onToggled} onUntoggled={this._onUntoggled}/>
 							
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
@@ -83,6 +83,21 @@ var MyApplication = React.createClass
 						</div>
 					</div>
 				);
+		},
+		
+		_onAddVoxel: function(e)
+		{
+			console.log('clicked!');
+		},
+		
+		_onToggled: function()
+		{
+			console.log('_onToggled!');
+		},
+		
+		_onUntoggled: function()
+		{
+			console.log('_onUntoggled!');
 		},
 				
 		_getLayoutType : function( width, height )

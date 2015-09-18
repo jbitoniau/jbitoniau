@@ -68,10 +68,10 @@ var MyApplication = React.createClass
 
 							}}, 
 
-							React.createElement(MyButton, React.__spread({image: "ToolAddVoxel.png"},  buttonProps, {tooltip: "Draw new voxels"})), 
+							React.createElement(MyButton, React.__spread({image: "ToolAddVoxel.png"},  buttonProps, {tooltip: "Draw new voxels", onClick: this._onAddVoxel})), 
 							React.createElement(MyButton, React.__spread({image: "ToolClearVoxel.png"},  buttonProps, {tooltip: "Clear/erase voxels", enabled: false})), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {tooltip: "Paint on existing voxels"})), 
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {toggleable: true})), 
+							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {toggleable: true, onToggled: this._onToggled, onUntoggled: this._onUntoggled})), 
 							
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
@@ -83,6 +83,21 @@ var MyApplication = React.createClass
 						)
 					)
 				);
+		},
+		
+		_onAddVoxel: function(e)
+		{
+			console.log('clicked!');
+		},
+		
+		_onToggled: function()
+		{
+			console.log('_onToggled!');
+		},
+		
+		_onUntoggled: function()
+		{
+			console.log('_onUntoggled!');
 		},
 				
 		_getLayoutType : function( width, height )
