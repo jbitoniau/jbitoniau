@@ -27,13 +27,13 @@ var MyApplication = React.createClass
 					width:buttonSize,
 					height:buttonSize,
 					hoverImage:'ButtonMask.png',
-					hoverImageOpacity:0.2,
-					activeImage:'ButtonMask2.png',
-					activeImageOpacity:0.7
+					hoverImageOpacity:0.4,
+					activeImage:'ButtonMask3.png',
+					activeImageOpacity:0.5
 				};
 				
-			if ( BrowserCapabilities.isMobileDevice() )
-				buttonProps['hoverable'] = false;
+			//if ( BrowserCapabilities.isMobileDevice() )
+			//	buttonProps['hoverable'] = false;
 					
 			return (	
 					<div style={{
@@ -68,20 +68,17 @@ var MyApplication = React.createClass
 
 							}}>
 
-							
 							<MyButton image='ToolAddVoxel.png' {...buttonProps}/>
-							
 							<MyButton image='ToolClearVoxel.png' {...buttonProps} enabled={false}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps} toggleable={true}/>
 							
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} hoverable={false}/>
-							
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps} />
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
 							
 						</div>
 					</div>

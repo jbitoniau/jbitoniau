@@ -7,7 +7,7 @@ var MyButton = React.createClass
 		propTypes: 
 		{
 			enabled: React.PropTypes.bool,
-			hoverable: React.PropTypes.bool,
+			toggleable: React.PropTypes.bool,
 			
 			width: React.PropTypes.number.isRequired,
 			height: React.PropTypes.number.isRequired,
@@ -23,18 +23,18 @@ var MyButton = React.createClass
 		getDefaultProps: function()
 		{
 			return { 
-					enabled:true,
-					hoverable: true,
+					enabled: true,
+					toggleable: false,
 					
-					width:32,
-					height:32,
-					image:null,
+					width: 32,
+					height: 32,
+					image: null,
 					
-					hoverImage:null,
-					hoverImageOpacity:0.5,
+					hoverImage: null,
+					hoverImageOpacity: 0.5,
 					
-					activeImage:null,
-					activeImageOpacity:0.5
+					activeImage: null,
+					activeImageOpacity: 0.5
 				};
 		},
 	
@@ -42,85 +42,107 @@ var MyButton = React.createClass
 		{
 			// The visual state of the button when it's enabled.
 			// Being disabled is not a state but a prop
-			return {enabledState:'normal'};	// normal: the button is sitting here, waiting to get pressed
-											// hover: the mouse is hovering above it
-											// active: the button is being clicked
-										
+			return {
+						hovered: false,		// The mouse is hovering above the button
+						active: false		// The button is active: being pressed if one-shot button, or toggled if toggle button
+					};	
 		},
 		
 		render: function()
 		{
-			console.log("s= " + this.state.enabledState );
-	
-			var image = this.props.image;
+			console.log( JSON.stringify(this.state) );
+		
+			var mainImage = this.props.image;
+			var mainImageStyle = {};
 			var w = this.props.width;
 			var h = this.props.height;
-
-			// Main image
-			var mainImageStyle = null;
-			if ( this.props.enabled )
-				mainImageStyle = MyButtonStyles['mainImage_' + this.state.enabledState];
-			else
-				mainImageStyle = MyButtonStyles['mainImage_' + 'disabled'];
-			Object.assign( mainImageStyle, MyButtonStyles['common']);
-
-			// Hover image
-			var hoverImage = null;
-			if ( this.props.hoverable )
-			{
-				hoverImage = this.props.hoverImage;
-				var hoverImageOpacity = 0;
-				var hoverImageStyle = {};
-				Object.assign( hoverImageStyle, MyButtonStyles['common']);
-				if ( this.props.enabled && this.state.enabledState=='hover' )
-				{
-					hoverImageOpacity = this.props.hoverImageOpacity;
-					Object.assign( hoverImageStyle, MyButtonStyles['hoverImage'] );
-				}
-				hoverImageStyle['filter'] = 'opacity(' + hoverImageOpacity + ')';
-				hoverImageStyle['WebkitFilter'] = 'opacity(' + hoverImageOpacity + ')';
-			}
 			
-			// Active image
+			var hoverImage = this.props.hoverImage;
+			var hoverImageStyle = { 
+					filter: 'opacity(0)',
+					WebkitFilter: 'opacity(0)',
+				};
+				
 			var activeImage = this.props.activeImage;
-			var activeImageOpacity = 0;
-			var activeImageStyle = {};
-			Object.assign( activeImageStyle, MyButtonStyles['common']);
-			if ( this.props.enabled && this.state.enabledState=='active' )
+			var activeImageStyle = { 
+					filter: 'opacity(0)',
+					WebkitFilter: 'opacity(0)',
+				};
+			
+			if ( this.props.enabled )
 			{
-				activeImageOpacity = this.props.activeImageOpacity;
-				Object.assign( activeImageStyle, MyButtonStyles['activeImage'] );
+				// Normal stuff here
+			
+				if ( this.state.hovered )
+				{
+					var opacity = this.props.hoverImageOpacity;
+					hoverImageStyle['filter'] = 'opacity(' + opacity + ')';
+					hoverImageStyle['WebkitFilter'] = 'opacity(' + opacity + ')';
+				}
+				
+				if ( this.state.active )
+				{
+					var opacity = this.props.activeImageOpacity;
+					activeImageStyle['filter'] = 'opacity(' + opacity + ')';
+					activeImageStyle['WebkitFilter'] = 'opacity(' + opacity + ')';
+					
+					mainImageStyle['position'] = 'relative';
+					mainImageStyle['top'] = 1;
+					mainImageStyle['left'] = 1;
+					hoverImageStyle['position'] = 'relative';
+					hoverImageStyle['top'] = 1;
+					hoverImageStyle['left'] = 1;
+					activeImageStyle['position'] = 'relative';
+					activeImageStyle['top'] = 1;
+					activeImageStyle['left'] = 1;
+				}
 			}
-			activeImageStyle['filter'] = 'opacity(' + activeImageOpacity + ')';
-			activeImageStyle['WebkitFilter'] = 'opacity(' + activeImageOpacity + ')';
+			else
+			{	
+				mainImageStyle['WebkitFilter'] ='opacity(0.3)';
+				mainImageStyle['filter'] ='opacity(0.3)';
+			}
 						
+						
+			var commonStyle = 
+				{
+					WebkitUserSelect:'none',
+					MozUserSelect: '-moz-none',
+					msUserSelect: 'none',
+					userSelect: 'none',
+				};
+				
+			Object.assign( mainImageStyle, commonStyle);
+			Object.assign( hoverImageStyle, commonStyle);
+			Object.assign( activeImageStyle, commonStyle);
+					
+			var eventHandlers = {
+						onMouseDown: this.onMouseDown,
+						onMouseUp: this.onMouseUp,
+						onClick: this.onButtonClick,
+						onMouseOver: this.onMouseOver,
+						onMouseOut: this.onMouseOut,
+						onTouchStart: this.onMouseDown,
+						onTouchEnd: this.onMouseUp
+					};		
+					
 			return ( 
-					<div style={{flex:'none', position:'relative', width:w, height:h}}
-									onMouseDown={this.onMouseDown}
-									onMouseUp={this.onMouseUp}
-									onClick={this.onButtonClick}
-									onMouseOver={this.onMouseOver}
-									onMouseOut={this.onMouseOut}
-									onTouchStart={this.onMouseDown}
-									onTouchEnd={this.onMouseUp}
+					<div style={{flex:'none', position:'relative', width:w, height:h}} 
 									>
 									
-						<div style={{position:'absolute', top:0, left:0, zIndex:5}}>
-							<img 	src={image}
-									onDragStart={this.onDragStart}
+						<div style={{position:'absolute', top:0, left:0, zIndex:1}}>
+							<img 	src={mainImage}
 									style={mainImageStyle}
 									width={w} 
 									height={h}
-									ref='mainDiv'
-									
-								/>	
+									{...eventHandlers}
+									ref='mainDiv'/>	
 						</div>
 						
 						{
 							hoverImage ?
-								<div style={{position:'absolute', top:0, left:0, zIndex:17}}>
+								<div style={{position:'absolute', top:0, left:0, zIndex:2, pointerEvents:'none'}}>
 									<img 	src={hoverImage}
-											onDragStart={this.onDragStart}
 											style={hoverImageStyle}
 											width={w} 
 											height={h}/>
@@ -131,9 +153,8 @@ var MyButton = React.createClass
 						
 						{
 							activeImage ?
-								<div style={{position:'absolute', top:0, left:0, zIndex:17}}>
+								<div style={{position:'absolute', top:0, left:0, zIndex:3, pointerEvents:'none'}}>
 									<img 	src={activeImage}
-											onDragStart={this.onDragStart}
 											style={activeImageStyle}
 											width={w} 
 											height={h}/>
@@ -155,104 +176,85 @@ var MyButton = React.createClass
 				
 		onMouseOver: function(e)
 		{
+			//console.log("onMouseOver");
+			
+			e.stopPropagation();
+			e.preventDefault();		
+			
 			if ( this.state.state=='disabled' )
 				return;	
-				
-			if ( !this.props.hoverable )
-				return;	
-		
-			this.setState( {enabledState:'hover'} );
+					
+			this.setState( {hovered:true} );
 		},
 		
 		onMouseOut: function(e)
 		{
+			//console.log("onMouseOut");
+			
+			e.stopPropagation();
+			e.preventDefault();		
+			
 			if ( this.state.state=='disabled' )
 				return;	
 	
-			if ( !this.props.hoverable )
-				return;					
-		
-			// Back to normal when we leave an enabled button, even if it's being pressed,
-			// which isn't great but will do for now
-			this.setState( {enabledState:'normal'} );
+			this.setState( {hovered:false} );
+			
+			// If the button is active when the mouse leaves it, we simulate 
+			// a mouse up event. This is because we only get mouse up when 
+			// inside the element. When the mouse up happens outside, it is 
+			// lost to us.
+			if ( this.state.active )
+				this.onMouseUp(e);
 		},
 		
 		onMouseDown: function(e)
 		{
+			//console.log("onMouseDown");
+			
+			e.stopPropagation();
+			e.preventDefault();
+			
 			if ( this.state.state=='disabled' )
 				return;	
-			this.setState( {enabledState:'active'} );
+			
+			if ( this.props.toggleable )
+			{
+				this.setState( {active:!this.state.active} );
+			}
+			else
+			{
+				this.setState( {active:true} );
+			}
 		},
 		
 		onMouseUp: function(e)
 		{
+			//console.log("onMouseUp");
+			
+			e.stopPropagation();
+			e.preventDefault();
+						
 			if ( this.state.state=='disabled' )
 				return;	
 				
-			// We know that the mouse cursor must still be on the element otherwise 
-			// we would have received a "mouse out" event, so that means we get 
-			// back to the hover state. It's a bit border line but it works.
-			// If the button is not hoverable, we get back to normal instead.
-			if ( this.props.hoverable )
-				this.setState( {enabledState:'hover'} );
+			if ( this.props.toggleable )
+			{
+				// Do nothing here!
+			}
 			else
-				this.setState( {enabledState:'normal'} );
+			{
+				this.setState( {active:false} );
+			}
 		},
 				
 		onButtonClick: function(e)
 		{	
+			e.stopPropagation();
+			e.preventDefault();
+			
 			// We should generate the click event ourselves! 
 			// We would bypass the 300ms delay that can happen on mobile
 			console.log("button click");
 		},
 	}
 );
-
-var MyButtonStyles = 
-{
-	common:
-	{
-		WebkitUserSelect:'none',
-		MozUserSelect: '-moz-none',
-		msUserSelect: 'none',
-		userSelect: 'none',
-	},
-
-	mainImage_normal: 
-	{
-		//backgroundColor:'rgba(255,0,255,0.1)',
-	},
-	
-	mainImage_hover: 
-	{
-		//backgroundColor:'rgba(255,0,0,0.3)',
-	},
-	
-	mainImage_active:
-	{
-		//backgroundColor:'rgba(255,0,0,0.8)',
-		position:'relative',
-		top:1,
-		left:1
-	},
-	
-	mainImage_disabled:
-	{
-		//backgroundColor:'rgba(128,128,128,0.5)',
-		WebkitFilter: 'opacity(0.3)',
-		filter: 'opacity(0.3)'
-	},
-	
-	hoverImage:
-	{
-	},
-	
-	activeImage:
-	{
-		position:'relative',
-		top:1,
-		left:1
-	},
-	
-	
-};

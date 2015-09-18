@@ -27,13 +27,13 @@ var MyApplication = React.createClass
 					width:buttonSize,
 					height:buttonSize,
 					hoverImage:'ButtonMask.png',
-					hoverImageOpacity:0.2,
-					activeImage:'ButtonMask2.png',
-					activeImageOpacity:0.7
+					hoverImageOpacity:0.4,
+					activeImage:'ButtonMask3.png',
+					activeImageOpacity:0.5
 				};
 				
-			if ( BrowserCapabilities.isMobileDevice() )
-				buttonProps['hoverable'] = false;
+			//if ( BrowserCapabilities.isMobileDevice() )
+			//	buttonProps['hoverable'] = false;
 					
 			return (	
 					React.createElement("div", {style: {
@@ -68,14 +68,11 @@ var MyApplication = React.createClass
 
 							}}, 
 
-							
 							React.createElement(MyButton, React.__spread({image: "ToolAddVoxel.png"},  buttonProps)), 
-							
 							React.createElement(MyButton, React.__spread({image: "ToolClearVoxel.png"},  buttonProps, {enabled: false})), 
-							
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {hoverable: false})), 
-							
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
+							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {toggleable: true})), 
+							
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
