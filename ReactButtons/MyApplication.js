@@ -68,9 +68,9 @@ var MyApplication = React.createClass
 
 							}}, 
 
-							React.createElement(MyButton, React.__spread({image: "ToolAddVoxel.png"},  buttonProps)), 
-							React.createElement(MyButton, React.__spread({image: "ToolClearVoxel.png"},  buttonProps, {enabled: false})), 
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
+							React.createElement(MyButton, React.__spread({image: "ToolAddVoxel.png"},  buttonProps, {tooltip: "Draw new voxels"})), 
+							React.createElement(MyButton, React.__spread({image: "ToolClearVoxel.png"},  buttonProps, {tooltip: "Clear/erase voxels", enabled: false})), 
+							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {tooltip: "Paint on existing voxels"})), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps, {toggleable: true})), 
 							
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 

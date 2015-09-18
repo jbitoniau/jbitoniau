@@ -17,7 +17,9 @@ var MyButton = React.createClass
 			hoverImageOpacity: React.PropTypes.number,
 			
 			activeImage: React.PropTypes.string,
-			activeImageOpacity: React.PropTypes.number
+			activeImageOpacity: React.PropTypes.number,
+			
+			tooltip: React.PropTypes.string,
 		},
 		
 		getDefaultProps: function()
@@ -34,7 +36,9 @@ var MyButton = React.createClass
 					hoverImageOpacity: 0.5,
 					
 					activeImage: null,
-					activeImageOpacity: 0.5
+					activeImageOpacity: 0.5,
+					
+					tooltip: null
 				};
 		},
 	
@@ -114,7 +118,7 @@ var MyButton = React.createClass
 					};		
 					
 			return ( 
-					<div style={{flex:'none', position:'relative', width:w, height:h}} 
+					<div title={this.props.tooltip} style={{flex:'none', position:'relative', width:w, height:h} } 
 									>
 									
 						<div style={{position:'absolute', top:0, left:0, zIndex:1}}>
@@ -189,8 +193,8 @@ var MyButton = React.createClass
 		{
 			//console.log("onMouseDown");
 			
-			e.stopPropagation();
-			e.preventDefault();
+			e.stopPropagation();		// All these are to prevent the browser's default behaviour to
+			e.preventDefault();			// emulate a mouseEnter/Leave (and therefore a hover feedback)
 			
 			if ( this.state.state=='disabled' )
 				return;	

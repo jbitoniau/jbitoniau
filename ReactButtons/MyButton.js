@@ -17,7 +17,9 @@ var MyButton = React.createClass
 			hoverImageOpacity: React.PropTypes.number,
 			
 			activeImage: React.PropTypes.string,
-			activeImageOpacity: React.PropTypes.number
+			activeImageOpacity: React.PropTypes.number,
+			
+			tooltip: React.PropTypes.string,
 		},
 		
 		getDefaultProps: function()
@@ -34,7 +36,9 @@ var MyButton = React.createClass
 					hoverImageOpacity: 0.5,
 					
 					activeImage: null,
-					activeImageOpacity: 0.5
+					activeImageOpacity: 0.5,
+					
+					tooltip: null
 				};
 		},
 	
@@ -107,14 +111,14 @@ var MyButton = React.createClass
 						onMouseDown: this.onMouseDown,
 						onMouseUp: this.onMouseUp,
 						onClick: this.onButtonClick,
-						onMouseOver: this.onMouseOver,
-						onMouseOut: this.onMouseOut,
+						onMouseEnter: this.onMouseEnter,
+						onMouseLeave: this.onMouseLeave,
 						onTouchStart: this.onMouseDown,
 						onTouchEnd: this.onMouseUp
 					};		
 					
 			return ( 
-					React.createElement("div", {style: {flex:'none', position:'relative', width:w, height:h}
+					React.createElement("div", {title: this.props.tooltip, style: {flex:'none', position:'relative', width:w, height:h} 
 									}, 
 									
 						React.createElement("div", {style: {position:'absolute', top:0, left:0, zIndex:1}}, 
@@ -152,9 +156,9 @@ var MyButton = React.createClass
 				);
 		},
 		
-		onMouseOver: function(e)
+		onMouseEnter: function(e)
 		{
-			//console.log("onMouseOver");
+			//console.log("onMouseEnter");
 			
 			e.stopPropagation();
 			e.preventDefault();		
@@ -165,9 +169,9 @@ var MyButton = React.createClass
 			this.setState( {hovered:true} );
 		},
 		
-		onMouseOut: function(e)
+		onMouseLeave: function(e)
 		{
-			//console.log("onMouseOut");
+			//console.log("onMouseLeave");
 			
 			e.stopPropagation();
 			e.preventDefault();		
@@ -189,8 +193,8 @@ var MyButton = React.createClass
 		{
 			//console.log("onMouseDown");
 			
-			e.stopPropagation();
-			e.preventDefault();
+			e.stopPropagation();		// All these are to prevent the browser's default behaviour to
+			e.preventDefault();			// emulate a mouseEnter/Leave (and therefore a hover feedback)
 			
 			if ( this.state.state=='disabled' )
 				return;	

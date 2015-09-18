@@ -68,9 +68,9 @@ var MyApplication = React.createClass
 
 							}}>
 
-							<MyButton image='ToolAddVoxel.png' {...buttonProps}/>
-							<MyButton image='ToolClearVoxel.png' {...buttonProps} enabled={false}/>
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
+							<MyButton image='ToolAddVoxel.png' {...buttonProps} tooltip='Draw new voxels'/>
+							<MyButton image='ToolClearVoxel.png' {...buttonProps} tooltip='Clear/erase voxels' enabled={false}/>
+							<MyButton image='ToolPaintVoxel.png' {...buttonProps} tooltip='Paint on existing voxels' />
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps} toggleable={true}/>
 							
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
