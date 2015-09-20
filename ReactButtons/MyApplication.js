@@ -1,5 +1,110 @@
 'use strict';
 
+var MySlider = React.createClass
+(
+	{displayName: "MySlider",
+		getInitialState: function()
+		{
+			return { 
+				mouseButtonPressed: -1,
+				knobPosition:0 };
+		},
+	
+		render: function() 
+		{
+		
+		//console.log("render" + this.state.knobPosition);
+			return (
+				React.createElement("div", {style: {position:'absolute', left:140, width:500, height:80, backgroundColor:'#BBBBBB'}, ref: "mainDiv"}, 
+				
+					React.createElement("div", {
+						style: {position:'relative', left:this.state.knobPosition, top:20, width:30, height:40, backgroundColor:'#FF0000'}, 
+						onMouseDown: this._onMouseDown, 
+						onTouchStart: this._onTouchStart, 
+						onTouchMove: this._onTouchMove}
+						
+					)
+				
+				)
+				);
+		},
+		
+		_onTouchStart: function(e)
+		{
+		},
+		
+		_onTouchMove: function(e)
+		{
+			var x = e.changedTouches[0].clientX;
+			var y = e.changedTouches[0].clientY;
+			
+			var mainDiv = React.findDOMNode(this.refs.mainDiv);
+			if ( !mainDiv )
+				return;
+			var rect = mainDiv.getBoundingClientRect();
+
+			var knobPos = x -  rect.left;
+			if ( knobPos<0 )
+				knobPos=0;
+			else if ( knobPos>rect.width )
+				knobPos=rect.width;
+		
+			//console.log('x:'+x+ "  y:"+y + "  knobPos:" + knobPos);
+			this.setState( {knobPosition:knobPos} );
+		
+		},
+		
+		_onMouseDown: function(e)
+		{	
+			console.log("_onMouseDown ");
+			
+			this.setState( {mouseButtonPressed:e.button} );
+			document.addEventListener('mousemove', this._onMouseMove, true);
+			document.addEventListener('mouseup', this._onMouseUp, true);
+		},
+		
+		_onMouseUp: function(e)
+		{	
+			console.log("_onMouseUp");
+			
+//if ( this.state.mouseButtonPressed!=e.button )
+//				return;	
+			
+			document.removeEventListener('mousemove', this._onMouseMove, true);
+			document.removeEventListener('mouseup', this._onMouseUp, true);
+		},
+		
+		_onMouseMove: function(e)
+		{
+//if ( this.state.mouseButtonPressed!=e.button )
+//	return;	
+			
+			var mainDiv = React.findDOMNode(this.refs.mainDiv);
+			if ( !mainDiv )
+				return;
+			var rect = mainDiv.getBoundingClientRect();
+
+			var mouseX = e.clientX;
+			var mouseY = e.clientY;
+			
+			var knobPos = mouseX -  rect.left;
+			if ( knobPos<0 )
+				knobPos=0;
+			else if ( knobPos>rect.width )
+				knobPos=rect.width;
+				
+console.log('x:'+mouseX+ "  y:"+mouseY + "  rectX" + rect.left + "  knobPos:" + knobPos);
+					
+			this.setState( {knobPosition:knobPos} );
+			
+		
+			//console.log(rect.top, rect.right, rect.bottom, rect.left);
+			
+			//console.log("_onMouseMove" + knobPos);
+		},
+	}
+);
+
 var MyApplication = React.createClass
 (
 	{displayName: "MyApplication",
@@ -78,7 +183,9 @@ var MyApplication = React.createClass
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps))
+							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
+							
+							React.createElement(MySlider, null)
 							
 						)
 					)
