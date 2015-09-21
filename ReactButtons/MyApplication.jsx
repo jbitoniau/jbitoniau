@@ -68,8 +68,18 @@ var MyApplication = React.createClass
 
 							}}>
 
-							<MySlider knobImage='SliderKnob.png' knobWidth={32} knobHeight={32} barWidth={400} barHeight={7}/>
-							<MySlider knobImage='SliderKnob.png' knobWidth={32} knobHeight={32} barWidth={400} barHeight={7}/>
+							<MySlider knobImage='SliderKnob.png' knobWidth={32} knobHeight={32} barWidth={400} barHeight={7}
+								min={3}
+								max={13}
+								step={1}
+								onKnobDragMove={this._onKnobDragMove}
+								onKnobDragEnd={this._onKnobDragEnd}/>
+							<MySlider knobWidth={32} knobHeight={32} barWidth={400} barHeight={7}
+								min={0}
+								max={33}
+								step={0}
+								onKnobDragMove={this._onKnobDragMove}
+								onKnobDragEnd={this._onKnobDragEnd}/>
 
 							<MyButton image='ToolAddVoxel.png' {...buttonProps} tooltip='Draw new voxels' onClick={this._onAddVoxel}/>
 							<MyButton image='ToolClearVoxel.png' {...buttonProps} tooltip='Clear/erase voxels' enabled={false}/>
@@ -89,7 +99,22 @@ var MyApplication = React.createClass
 					</div>
 				);
 		},
-		
+			
+		/*_onKnobDragStart: function( value )
+		{
+			console.log('_onKnobDragStart ' + value);
+		},*/
+
+		_onKnobDragMove: function( value )
+		{
+			console.log('_onKnobDragMove ' + value);
+		},
+
+		_onKnobDragEnd: function( value )
+		{
+			console.log('_onKnobDragEnd ' + value);
+		},
+
 		_onAddVoxel: function(e)
 		{
 			console.log('clicked!');

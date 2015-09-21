@@ -5,7 +5,11 @@ var MySlider = React.createClass
 	{
 		propTypes: 
 		{
-			onKnobDragStart: React.PropTypes.func,
+			min: React.PropTypes.number,
+			max: React.PropTypes.number,
+			step: React.PropTypes.number,
+
+			//onKnobDragStart: React.PropTypes.func,
 			onKnobDragMove: React.PropTypes.func,
 			onKnobDragEnd: React.PropTypes.func,
 			
@@ -19,7 +23,11 @@ var MySlider = React.createClass
 		getDefaultProps: function()
 		{
 			return { 
-					onKnobDragStart: null,
+					min: 0,
+					max: 10,
+					step: 1,
+
+					//onKnobDragStart: null,
 					onKnobDragMove: null,
 					onKnobDragEnd: null,
 					
@@ -49,7 +57,11 @@ var MySlider = React.createClass
 			var knobWidth = this.props.knobWidth;
 			var knobHeight = this.props.knobHeight;
 
-			var knobPosX = this.state.knobPosition - (knobWidth/2);
+
+//			var knobPosX = this.state.knobPosition - (knobWidth/2);
+var value =this._getSliderValue( this.state.knobPosition );
+var knobPosX = this._getKnobPositionFromSliderValue(value);
+
 			var knobPosY = (barHeight/2) - (knobHeight/2);
 
 			var sliderWidth = barWidth + knobWidth;
@@ -80,6 +92,10 @@ var MySlider = React.createClass
 									maxWidth:sliderWidth, maxHeight:sliderHeight,
 									width:sliderWidth, 
 									height:sliderHeight}}
+							onMouseDown={this._onBarMouseDown}		// Not really the 'bar' here... but more the 'mainElement' div
+							onTouchStart={this._onBarTouchStart}
+							onTouchMove={this._onBarTouchMove}
+							onTouchEnd={this._onBarTouchEnd}
 							ref='mainElement'>
 					
 						<div style={{position:'absolute', 
@@ -88,10 +104,7 @@ var MySlider = React.createClass
 										width:barWidth, 
 										height:barHeight, 
 										backgroundColor:'grey'}}
-								onMouseDown={this._onBarMouseDown}
-								onTouchStart={this._onBarTouchStart}
-								onTouchMove={this._onBarTouchMove}
-								onTouchEnd={this._onBarTouchEnd}
+								
 								ref='barElement'>
 						</div>
 
@@ -104,6 +117,38 @@ var MySlider = React.createClass
 
 					</div>
 				);
+		},
+
+		_getKnobPositionFromSliderValue: function( sliderValue )
+		{
+			var min = this.props.min;
+			var max = this.props.max;
+			var barWidth = this.props.barWidth;
+			var knobWidth = this.props.knobWidth;
+			var pos = ( barWidth * (sliderValue - min) / (max-min) ) - (knobWidth/2);
+			return pos;
+		},
+
+		_getSliderValue: function( knobPosition )
+		{
+			var min = this.props.min;
+			var max = this.props.max;
+			var step = this.props.step;
+			var barWidth = this.props.barWidth;
+			var normalizedPos = knobPosition / barWidth;
+
+			var value = ( normalizedPos * (max-min) );
+			if ( step!=0 )
+				value = this._roundValueTo( value, step );
+			value += min;
+			return value;
+		},
+
+		_roundValueTo: function( value, step )
+		{
+			var n = Math.round( value / step );
+			var v = n * step;
+			return v;
 		},
 
 		_documentToSliderElementPosition : function( x, y, sliderElementRefName )
@@ -140,11 +185,19 @@ var MySlider = React.createClass
 			else if ( knobPos>this.props.barWidth )
 				knobPos = this.props.barWidth;
 			this.setState( {knobPosition:knobPos });
+
+			var sliderValue = this._getSliderValue( knobPos );
+			if ( this.props.onKnobDragMove )
+				this.props.onKnobDragMove(sliderValue);
 		},
 		
 		_knobDragEnd: function(x, y)
 		{
 			this.setState( {knobDragPointX:0, knobDragPointY:0 });
+
+			var sliderValue = this._getSliderValue( this.state.knobPosition );
+			if ( this.props.onKnobDragEnd )
+				this.props.onKnobDragEnd(sliderValue);
 		},
 
 		_onKnobMouseDown: function(e)
