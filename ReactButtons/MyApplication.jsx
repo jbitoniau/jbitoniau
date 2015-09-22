@@ -89,9 +89,6 @@ var MyApplication = React.createClass
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
 							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
-							<MyButton image='ToolPaintVoxel.png' {...buttonProps}/>
 							
 							
 							

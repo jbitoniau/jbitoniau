@@ -88,9 +88,6 @@ var MyApplication = React.createClass
 							
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
-							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps)), 
 							React.createElement(MyButton, React.__spread({image: "ToolPaintVoxel.png"},  buttonProps))
 							
 							
