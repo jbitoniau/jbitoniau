@@ -37,8 +37,11 @@ var MyApplication = React.createClass
 							React.createElement("img", {src: "3.png", style: {flex:'none', height:50}}), 
 							React.createElement(MyButton, {style: {flex:'none', backgroundColor:'#FF00FF', boxShadow:' 8px 8px 0px #000'}, image: "ToolAddVoxel.png", width: 128, height: 128}), 
 							React.createElement("img", {src: "1.png", style: {flex:'none', height:50}}), 
-							React.createElement(MyTestControl, {style: {flex:'auto', backgroundColor:'magenta'}}), 
-							React.createElement(MyTestControl, {style: {flex:'none', width:300, alignSelf:'flex-end', backgroundColor:'magenta'}})
+							React.createElement(UISlider, {style: {flex:'auto', backgroundColor:'magenta'}, 
+									knobHeight: 80, knobWidth: 120, min: 5, max: 15, step: 1, 
+									onKnobDragMove: this.onKnobDragMove, 
+									onKnobDragEnd: this.onKnobDragEnd}), 
+							React.createElement(UISlider, {style: {flex:'none', alignSelf:'flex-end', backgroundColor:'magenta'}})
 						)
 					)
 				);
@@ -50,6 +53,16 @@ var MyApplication = React.createClass
 		{	
 			var element = React.findDOMNode(this.refs.deux);
 			console.log(element.width + ', ' + element.height);
+		},
+
+		onKnobDragMove: function(e)
+		{
+			console.log("onKnobDragMove:" + e );
+		},
+
+		onKnobDragEnd: function(e)
+		{
+			console.log("onKnobDragEnd:" + e );
 		},
 	}
 );
