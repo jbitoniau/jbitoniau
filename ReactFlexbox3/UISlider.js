@@ -88,7 +88,11 @@ var UISlider = React.createClass
 			return ( 
 						
 					// Main Div placing centering its unique child vertically with flex
-					React.createElement("div", {style: mainDivStyle}, 
+					React.createElement("div", {style: mainDivStyle, 
+						onMouseDown: this._onBarMouseDown, 
+										onTouchStart: this._onBarTouchStart, 
+										onTouchMove: this._onBarTouchMove, 
+										onTouchEnd: this._onBarTouchEnd}, 
 
 						/* The rectangle with fixed height for the bar and the knob */ 
 						React.createElement("div", {style: {flex:'none', height:barThickness}}, 
@@ -103,10 +107,7 @@ var UISlider = React.createClass
 										bottom:0,
 										backgroundColor:UISlider.barBackgroundColor,
 										borderRadius:UISlider.barBorderRadius}, 
-										onMouseDown: this._onBarMouseDown, 
-										onTouchStart: this._onBarTouchStart, 
-										onTouchMove: this._onBarTouchMove, 
-										onTouchEnd: this._onBarTouchEnd, 
+										
 										ref: "sliderBar"}, 
 									React.createElement("div", {style: {position:'relative', width:'100%', height:'100%'}}, 
 								
