@@ -9,6 +9,7 @@
 // Event generated need to give more info: which instance of UISlider is calling, etc...
 // Vertical or horizontal
 // Could use a UIButton as a knob in theory (the button should provide info about where it was clicked...)
+// Note explaining element.mouseDown and document.mouseMove/mouseUp!!!
 var UISlider = React.createClass
 (
 	{
@@ -59,7 +60,7 @@ var UISlider = React.createClass
 	
 		render: function() 
 		{
-			console.log( JSON.stringify(this.state) );
+			//console.log( JSON.stringify(this.state) );
 
 			var sliderValue =this._getSliderValueFromKnobNormalizedPosition(this.state.knobNormalizedPosition);
 			var knobPos = this._getKnobNormalizedPositionFromSliderValue(sliderValue );		
@@ -91,7 +92,7 @@ var UISlider = React.createClass
 
 						{/* The rectangle with fixed height for the bar and the knob */ }
 						<div style={{flex:'none', height:barThickness}}>
-							<div style={{position:'relative', width:'100%', height:'100%', border:'1px solid yellow'}}>
+							<div style={{position:'relative', width:'100%', height:'100%'}}>
 
 								{/* The bar */}
 								<div style={{
@@ -103,16 +104,18 @@ var UISlider = React.createClass
 										backgroundColor:UISlider.barBackgroundColor,
 										borderRadius:UISlider.barBorderRadius}} 
 										onMouseDown={this._onBarMouseDown}
+										onTouchStart={this._onBarTouchStart}
+										onTouchMove={this._onBarTouchMove}
+										onTouchEnd={this._onBarTouchEnd}
 										ref='sliderBar'>
 									<div style={{position:'relative', width:'100%', height:'100%'}}>
 								
-										{/* The knob anchor point placed at proper position */}
+										{/* The knob anchor point placed at proper position on the bar */}
 										<div style={{position:'absolute', 
 											top: barThickness/2,
 											left:knobPercentage,
 											width:0,
-											height:0,
-											border:'1px solid pink'}}
+											height:0}}
 											ref='sliderKnobAnchor'>
 										
 											{/* The knob image (correctly centered on parent anchor) */}
@@ -124,6 +127,9 @@ var UISlider = React.createClass
 												height:knobHeight,
 												background:'red'}}
 												onMouseDown={this._onKnobMouseDown}
+												onTouchStart={this._onKnobTouchStart}
+												onTouchMove={this._onKnobTouchMove}
+												onTouchEnd={this._onKnobTouchEnd}
 												ref='sliderKnob'>
 											</div>
 										</div>
@@ -136,14 +142,12 @@ var UISlider = React.createClass
 		},
 
 		/*
-			Mouse handlers
+			Mouse event handlers
 		*/
 		_onKnobMouseDown : function(e)
 		{
-console.log('_onKnobMouseDown');
 			e.preventDefault();
 			e.stopPropagation();
-			
 			document.addEventListener('mousemove', this._onKnobMouseMove, true);
 			document.addEventListener('mouseup', this._onKnobMouseUp, true);
 			this._knobDragStart( e.clientX, e.clientY );
@@ -151,7 +155,6 @@ console.log('_onKnobMouseDown');
 
 		_onKnobMouseMove: function(e)
 		{
-console.log('_onKnobMouseMove');
 			e.preventDefault();
 			e.stopPropagation();
 			this._knobDragMove( e.clientX, e.clientY );
@@ -159,10 +162,8 @@ console.log('_onKnobMouseMove');
 
 		_onKnobMouseUp: function(e)
 		{	
-console.log('_onKnobMouseUp');
 			e.preventDefault();
 			e.stopPropagation();
-			
 			document.removeEventListener('mousemove', this._onKnobMouseMove, true);
 			document.removeEventListener('mouseup', this._onKnobMouseUp, true);
 			this._knobDragEnd();
@@ -170,14 +171,54 @@ console.log('_onKnobMouseUp');
 
 		_onBarMouseDown: function(e)
 		{
-console.log('_onBarMouseDown');
 			e.preventDefault();
 			e.stopPropagation();
-			
 			this.setState( {dragStartKnobPosition:0} );
 			this._knobDragMove( e.clientX, e.clientY );
 			document.addEventListener('mousemove', this._onKnobMouseMove, true);
 			document.addEventListener('mouseup', this._onKnobMouseUp, true);
+		},
+
+		/*
+			Touch event handlers
+		*/
+		_onKnobTouchStart: function(e)
+		{
+			e.preventDefault();
+			e.stopPropagation();
+			this._knobDragStart( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
+		},
+
+		_onKnobTouchMove: function(e)
+		{
+			e.preventDefault();
+			e.stopPropagation();
+			this._knobDragMove( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
+		},
+
+		_onKnobTouchEnd: function(e)
+		{
+			e.preventDefault();
+			e.stopPropagation();
+			this._knobDragEnd();
+		},
+
+		_onBarTouchStart: function(e)
+		{
+			e.preventDefault();
+			e.stopPropagation();
+			this.setState( {dragStartKnobPosition:0} );
+			this._knobDragMove( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
+		},
+
+		_onBarTouchMove: function(e)
+		{
+			this._onKnobTouchMove(e);
+		},
+
+		_onBarTouchEnd: function(e)
+		{
+			this._onKnobTouchEnd(e);
 		},
 
 		/*	
@@ -273,124 +314,7 @@ console.log('_onBarMouseDown');
 			var n = Math.round( value / step );
 			var v = n * step;
 			return v;
-		},
-
-		
-	/*	_onKnobMouseDown: function(e)
-		{	
-console.log('_onKnobMouseDown');
-			e.preventDefault();
-			e.stopPropagation();
-
-			document.addEventListener('mousemove', this._onDocumentMouseMove, true);
-			document.addEventListener('mouseup', this._onDocumentMouseUp, true);
-
-			var x = e.clientX;
-			var y = e.clientY;
-			this._knobDragStart( x, y );
-		},
-		
-		_onDocumentMouseMove: function(e)
-		{
-console.log('_onDocumentMouseMove');
-			e.preventDefault();
-			e.stopPropagation();
-
-			var x = e.clientX;
-			var y = e.clientY;
-			this._knobDragMove( x, y );
-		},
-
-		_onDocumentMouseUp: function(e)
-		{	
-console.log('_onDocumentMouseUp');
-			e.preventDefault();
-			e.stopPropagation();
-			
-			document.removeEventListener('mousemove', this._onDocumentMouseMove, true);
-			document.removeEventListener('mouseup', this._onDocumentMouseUp, true);
-			this._knobDragEnd();
-		},
-
-		_onBarMouseDown: function(e)
-		{
-console.log('_onBarMouseDown');
-			e.preventDefault();
-			e.stopPropagation();
-			
-			this.setState( {knobDragPointX:0, knobDragPointY:0 });
-			
-			var x = e.clientX;
-			var y = e.clientY;
-			this._knobDragMove( x, y );
-
-			document.addEventListener('mousemove', this._onDocumentMouseMove, true);
-			document.addEventListener('mouseup', this._onDocumentMouseUp, true);
-		},
-
-		_onKnobTouchStart: function(e)
-		{
-console.log('_onKnobTouchStart');
-			e.preventDefault();
-			e.stopPropagation();
-
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragStart( x, y );
-		},
-		
-		_onKnobTouchMove: function(e)
-		{
-console.log('_onKnobTouchMove');
-			e.preventDefault();
-			e.stopPropagation();
-
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragMove( x, y );
-		},
-
-		_onKnobTouchEnd: function(e)
-		{
-console.log('_onKnobTouchMove');
-			e.preventDefault();
-			e.stopPropagation();
-
-			this._knobDragEnd();
-		},
-
-		_onBarTouchStart: function(e)
-		{
-console.log('_onBarTouchStart');
-			e.preventDefault();
-			e.stopPropagation();
-
-			this.setState( {knobDragPointX:0, knobDragPointY:0 });
-			
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragMove( x, y );
-		},
-
-		_onBarTouchMove: function(e)
-		{
-console.log('_onBarTouchMove');
-			e.preventDefault();
-			e.stopPropagation();
-
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragMove( x, y );
-		},
-
-		_onBarTouchEnd: function(e)
-		{
-console.log('_onBarTouchEnd');
-			e.preventDefault();
-			e.stopPropagation();
-			this._knobDragEnd();
-		},*/
-
+		}
 	}
 );
 
