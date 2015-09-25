@@ -15,6 +15,8 @@
 var UISlider = React.createClass
 (
 	{displayName: "UISlider",
+		mixins: [UIDebuggable],
+
 		statics:
 		{
 			// These settings concern the bar itself. For now they are hard-coded
@@ -64,7 +66,8 @@ var UISlider = React.createClass
 	
 		render: function() 
 		{
-			//console.log( JSON.stringify(this.state) );
+			this._setDebugActive(true);
+			this._log( "render " + JSON.stringify( this.state ) );
 
 			var sliderValue =this._getSliderValueFromKnobNormalizedPosition(this.state.knobNormalizedPosition);
 			var knobPos = this._getKnobNormalizedPositionFromSliderValue(sliderValue );		
@@ -151,6 +154,7 @@ var UISlider = React.createClass
 		*/
 		_onKnobMouseDown : function(e)
 		{
+			this._log("_onKnobMouseDown");
 			e.preventDefault();
 			e.stopPropagation();
 			document.addEventListener('mousemove', this._onKnobMouseMove, true);
@@ -160,6 +164,7 @@ var UISlider = React.createClass
 
 		_onKnobMouseMove: function(e)
 		{
+			this._log("_onKnobMouseMove");
 			e.preventDefault();
 			e.stopPropagation();
 			this._knobDragMove( e.clientX, e.clientY );
@@ -167,6 +172,7 @@ var UISlider = React.createClass
 
 		_onKnobMouseUp: function(e)
 		{	
+			this._log("_onKnobMouseUp");
 			e.preventDefault();
 			e.stopPropagation();
 			document.removeEventListener('mousemove', this._onKnobMouseMove, true);
@@ -176,6 +182,7 @@ var UISlider = React.createClass
 
 		_onBarMouseDown: function(e)
 		{
+			this._log("_onBarMouseDown");
 			e.preventDefault();
 			e.stopPropagation();
 			this.setState( {dragStartKnobPosition:0} );
@@ -189,6 +196,7 @@ var UISlider = React.createClass
 		*/
 		_onKnobTouchStart: function(e)
 		{
+			this._log("_onKnobTouchStart");
 			e.preventDefault();
 			e.stopPropagation();
 			this._knobDragStart( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
@@ -196,6 +204,7 @@ var UISlider = React.createClass
 
 		_onKnobTouchMove: function(e)
 		{
+			this._log("_onKnobTouchMove");
 			e.preventDefault();
 			e.stopPropagation();
 			this._knobDragMove( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
@@ -203,6 +212,7 @@ var UISlider = React.createClass
 
 		_onKnobTouchEnd: function(e)
 		{
+			this._log("_onKnobTouchEnd");
 			e.preventDefault();
 			e.stopPropagation();
 			this._knobDragEnd();
@@ -210,6 +220,7 @@ var UISlider = React.createClass
 
 		_onBarTouchStart: function(e)
 		{
+			this._log("_onBarTouchStart");
 			e.preventDefault();
 			e.stopPropagation();
 			this.setState( {dragStartKnobPosition:0} );
@@ -218,11 +229,13 @@ var UISlider = React.createClass
 
 		_onBarTouchMove: function(e)
 		{
+			this._log("_onBarTouchMove");
 			this._onKnobTouchMove(e);
 		},
 
 		_onBarTouchEnd: function(e)
 		{
+			this._log("_onBarTouchEnd");
 			this._onKnobTouchEnd(e);
 		},
 

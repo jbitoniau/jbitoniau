@@ -1,34 +1,45 @@
 'use strict';
 
 /*
+	UIButton
 
-	For click button
-	onPressed
-	onClick + onReleased
+	An image-based button widget.
+	
+	A button can be:
+	- disabled (enabled=false) in which case it appears greyed/washed out (via opacity). 
+	  no interaction is possible with it
+	- enabled (enabled=true). Additional (and combinable) "sub"-states are:
+		- hovered: when the mouse is just above it
+		- active: when the user is pressing it 
 
-	For toggled button
-	onPressed
-	onToggled(true) + onReleased
+	Visually the button is made up of 3 images on top of each other:
+	- the main image (props.image)
+	- the hover image (props.hoverImage)
+	- the active image (props.activeImage)
 
-	onPressed
-	onToggled(false) + onReleased
+	There two types of buttons:
+	- one-shot (toggleable=false)
+	- toggle (toggleable=true)
+	
+	In terms of generated events:
+	- one-shot button: onPressed, then later onClick + onReleased
+	- toggle button: 
+		onPressed, then later onToggled(true) + onReleased
+		onPressed, then later onToggled(false) + onReleased
 
-	high level click or toggled events happen on the release of the button
-	lower level pressed/release events are also available if needed
-
-	Support tooltip via title prop
+	Use props.title to set a tooltip to the button.
 */
 
 var UIButton = React.createClass
 ( 
 	{displayName: "UIButton",
+		mixins: [UIDebuggable],
+
 		statics:
 		{
 			opacityWhenDisabled:0.4,
 			pixelsShiftWhenActive:1,
 		},
-
-		mixins: [UIDebuggable],
 
 		propTypes:
 		{
