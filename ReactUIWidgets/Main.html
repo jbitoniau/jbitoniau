@@ -25,8 +25,14 @@
 					left:0px;">
 		</div>
 		
+		<div style="position:fixed; top:0; left:0;">
+			<input type='button' value='clear' onClick='document.getElementById("UIDebuggableOutputElement").innerHTML=""'/>
+			<pre id='UIDebuggableOutputElement'></pre>
+		</div>
+
 		<script src="./react/react-0.13.2.js"></script>
 		<script src="./UIBaseWidget.js"></script>
+		<script src="./UIDebuggable.js"></script>
 		<script src="./UISlider.js"></script>
 		<script src="./UIButton.js"></script>
 		<script src="./MyButton.js"></script>

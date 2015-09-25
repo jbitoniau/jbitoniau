@@ -28,6 +28,8 @@ var UIButton = React.createClass
 			pixelsShiftWhenActive:1,
 		},
 
+		mixins: [UIDebuggable],
+
 		propTypes:
 		{
 			enabled: React.PropTypes.bool,
@@ -82,7 +84,8 @@ var UIButton = React.createClass
 
 		render: function()
 		{
-			//this._log( JSON.stringify( this.state ) );
+			this._setDebugActive(true);
+			this._log( "render " + JSON.stringify( this.state ) );
 
 			// Here you give your widget its default style, typically it's min 
 			// and possibly max size, depending on the nature of the widget
@@ -159,7 +162,7 @@ var UIButton = React.createClass
 
 		_onMouseEnter: function( e )
 		{
-//this._log("onMouseEnter");
+			this._log("onMouseEnter");
 			//e.stopPropagation();
 			e.preventDefault();		
 			this.setState( {hovered:true} );
@@ -167,15 +170,15 @@ var UIButton = React.createClass
 
 		_onMouseLeave: function( e )
 		{
-//this._log("onMouseLeave");
-			//e.stopPropagation();
+			this._log("_onMouseLeave");
+			//e.stopPropagation(); 
 			e.preventDefault();		
 			this.setState( {hovered:false} );
 		},
 
 		_onMouseDown: function( e )
 		{
-//this._log("onMouseDown");
+			this._log("_onMouseDown");
 			//e.stopPropagation();
 			e.preventDefault();	
 
@@ -189,7 +192,7 @@ var UIButton = React.createClass
 
 		_onMouseUp: function( e )
 		{
-//this._log("onMouseUp");
+			this._log("_onMouseUp");
 			//e.stopPropagation();
 			e.preventDefault();
 			document.addEventListener('mouseup', this._onMouseUp, true);
@@ -202,7 +205,7 @@ var UIButton = React.createClass
 		*/
 		_onTouchStart: function(e)
 		{
-//this._log("_onTouchStart " + e.changedTouches[0].identifier + "   " + e.changedTouches.length + " touches" );			
+			this._log("_onTouchStart id:" + e.changedTouches[0].identifier );			
 			//e.stopPropagation();
 			e.preventDefault();		
 
@@ -216,7 +219,7 @@ var UIButton = React.createClass
 
 		_onTouchEnd: function(e)
 		{
-//this._log("_onTouchEnd " + e.changedTouches[0].identifier + "   " + e.changedTouches.length + " touches" );
+			this._log("_onTouchEnd id:" + e.changedTouches[0].identifier );
 			//e.stopPropagation();
 			e.preventDefault();
 			 
@@ -274,16 +277,6 @@ var UIButton = React.createClass
 
 			if ( this.props.onReleased )
 				this.props.onReleased();
-		},
-
-		_log: function( message )
-		{
-			var debugDiv = React.findDOMNode( this.refs.debugDiv );
-			if ( !debugDiv )
-				return;
-
-			debugDiv.innerHTML += message + '\n';
-			console.log(message);
 		},
 	}
 );
