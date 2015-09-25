@@ -84,7 +84,7 @@ var UIButton = React.createClass
 
 		render: function()
 		{
-			this._setDebugActive(true);
+			//this._setDebugActive(true);
 			this._log( "render " + JSON.stringify( this.state ) );
 
 			// Here you give your widget its default style, typically it's min 
