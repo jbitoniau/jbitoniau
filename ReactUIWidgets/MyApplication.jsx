@@ -42,12 +42,14 @@ var MyApplication = React.createClass
 									onKnobDragMove={this.onKnobDragMove}
 									onKnobDragEnd={this.onKnobDragEnd}/>
 							<UISlider style={{flex:'none', alignSelf:'flex-end', backgroundColor:'magenta', width:500}} step={1} />
+							<UIBaseWidget style={{flex:'auto', backgroundColor:'magenta'}}/>
+
+							<UIButton style={{flex:'auto', backgroundColor:'magenta'}}
+								image='ToolAddVoxel.png' hoverImage='ButtonHover.png' activeImage='ButtonActive.png'/>
 						</div>
 					</div>
 				);
 		},
-		
-		/* <MyTestControl style={{flex:'auto', backgroundColor:'#FF00FF', boxShadow:'8px 8px 0px #000'}} /> */
 		
 		onClick: function(e)
 		{	

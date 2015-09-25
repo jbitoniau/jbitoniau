@@ -10,11 +10,15 @@
 // Vertical or horizontal
 // Could use a UIButton as a knob in theory (the button should provide info about where it was clicked...)
 // Note explaining element.mouseDown and document.mouseMove/mouseUp!!!
+// When a touch interaction happens. Only react to the identifier of the touch. If a mouse interaction happens, cancel touch
+// and reciprocally
 var UISlider = React.createClass
 (
-	{displayName: "UISlider",
+	{
 		statics:
 		{
+			// These settings concern the bar itself. For now they are hard-coded
+			// but we could make them more flexible if needed.
 			barThickness: 10,
 			barBackgroundColor: 'black',
 			barBorderRadius: 4
@@ -22,9 +26,9 @@ var UISlider = React.createClass
 
 		propTypes: 
 		{
-			min: React.PropTypes.number,
-			max: React.PropTypes.number,
-			step: React.PropTypes.number,
+			min: React.PropTypes.number,	// Minimum for the slider value (i.e value at full left)
+			max: React.PropTypes.number,	// Maximum for the slider value (i.e value at full right)
+			step: React.PropTypes.number,	// The increment between each slider value, starting from minimum
 
 			knobWidth: React.PropTypes.number,
 			knobHeight: React.PropTypes.number,
@@ -53,7 +57,7 @@ var UISlider = React.createClass
 		getInitialState: function()
 		{
 			return { 
-				dragStartKnobPosition: 0, 		// Position in pixel relative to knob center where the drag started
+				dragStartKnobPosition: 0, 		// Position in pixel relative to knob center where the user started the drag (mouse or touch)
 				knobNormalizedPosition: 0.8, 	// Position expressed between 0 and 1 and converted into CSS percentage so it's correct on resize
 			};
 		},
@@ -88,57 +92,57 @@ var UISlider = React.createClass
 			return ( 
 						
 					// Main Div placing centering its unique child vertically with flex
-					React.createElement("div", {style: mainDivStyle, 
-						onMouseDown: this._onBarMouseDown, 
-										onTouchStart: this._onBarTouchStart, 
-										onTouchMove: this._onBarTouchMove, 
-										onTouchEnd: this._onBarTouchEnd}, 
+					<div style={mainDivStyle}
+						onMouseDown={this._onBarMouseDown}
+										onTouchStart={this._onBarTouchStart}
+										onTouchMove={this._onBarTouchMove}
+										onTouchEnd={this._onBarTouchEnd}> 
 
-						/* The rectangle with fixed height for the bar and the knob */ 
-						React.createElement("div", {style: {flex:'none', height:barThickness}}, 
-							React.createElement("div", {style: {position:'relative', width:'100%', height:'100%'}}, 
+						{/* The rectangle with fixed height for the bar and the knob */ }
+						<div style={{flex:'none', height:barThickness}}>
+							<div style={{position:'relative', width:'100%', height:'100%'}}>
 
-								/* The bar */
-								React.createElement("div", {style: {
+								{/* The bar */}
+								<div style={{
 										position:'absolute', 
 										left:knobWidth/2,
 										right:knobWidth/2,
 										top:0,
 										bottom:0,
 										backgroundColor:UISlider.barBackgroundColor,
-										borderRadius:UISlider.barBorderRadius}, 
+										borderRadius:UISlider.barBorderRadius}} 
 										
-										ref: "sliderBar"}, 
-									React.createElement("div", {style: {position:'relative', width:'100%', height:'100%'}}, 
+										ref='sliderBar'>
+									<div style={{position:'relative', width:'100%', height:'100%'}}>
 								
-										/* The knob anchor point placed at proper position on the bar */
-										React.createElement("div", {style: {position:'absolute', 
+										{/* The knob anchor point placed at proper position on the bar */}
+										<div style={{position:'absolute', 
 											top: barThickness/2,
 											left:knobPercentage,
 											width:0,
-											height:0}, 
-											ref: "sliderKnobAnchor"}, 
+											height:0}}
+											ref='sliderKnobAnchor'>
 										
-											/* The knob image (correctly centered on parent anchor) */
-											React.createElement("div", {style: {
+											{/* The knob image (correctly centered on parent anchor) */}
+											<div style={{
 												position:'relative', 
 												top:-knobHeight/2, 
 												left:-knobWidth/2, 
 												width:knobWidth, 
 												height:knobHeight,
-												background:'red'}, 
-												onMouseDown: this._onKnobMouseDown, 
-												onTouchStart: this._onKnobTouchStart, 
-												onTouchMove: this._onKnobTouchMove, 
-												onTouchEnd: this._onKnobTouchEnd, 
-												ref: "sliderKnob"}
-											)
-										)
-									)
-								)
-							)
-						)
-					)
+												background:'red'}}
+												onMouseDown={this._onKnobMouseDown}
+												onTouchStart={this._onKnobTouchStart}
+												onTouchMove={this._onKnobTouchMove}
+												onTouchEnd={this._onKnobTouchEnd}
+												ref='sliderKnob'>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				);
 		},
 

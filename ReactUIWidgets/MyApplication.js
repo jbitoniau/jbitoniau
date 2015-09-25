@@ -41,13 +41,15 @@ var MyApplication = React.createClass
 									knobHeight: 80, knobWidth: 120, min: 5, max: 15, step: 0, 
 									onKnobDragMove: this.onKnobDragMove, 
 									onKnobDragEnd: this.onKnobDragEnd}), 
-							React.createElement(UISlider, {style: {flex:'none', alignSelf:'flex-end', backgroundColor:'magenta', width:500}, step: 1})
+							React.createElement(UISlider, {style: {flex:'none', alignSelf:'flex-end', backgroundColor:'magenta', width:500}, step: 1}), 
+							React.createElement(UIBaseWidget, {style: {flex:'auto', backgroundColor:'magenta'}}), 
+
+							React.createElement(UIButton, {style: {flex:'auto', backgroundColor:'magenta'}, 
+								image: "ToolAddVoxel.png", hoverImage: "ButtonHover.png", activeImage: "ButtonActive.png"})
 						)
 					)
 				);
 		},
-		
-		/* <MyTestControl style={{flex:'auto', backgroundColor:'#FF00FF', boxShadow:'8px 8px 0px #000'}} /> */
 		
 		onClick: function(e)
 		{	
