@@ -21,7 +21,8 @@ var UIBaseWidget = React.createClass
 			mainDivStyle = Object.assign( mainDivStyle, 
 								{
 									position:'relative',
-									// Could be also display:flex and other things here...
+									// Don't specify size here as it should be done via user-defined style
+									// as for any regular HTML/CSS element
 								} );
 
 

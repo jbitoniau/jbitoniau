@@ -12,9 +12,7 @@ var MyApplication = React.createClass
 						position:'relative',
 						width:'100%',
 						height:'100%',
-						}}
-						
-						onClick={this.onClick}>
+						}}>
 						
 						<div style={{
 							overflow:'hidden',
@@ -25,13 +23,61 @@ var MyApplication = React.createClass
 							left:5,
 						
 							display:'flex',
-							justifyContent: 'space-between',
+							justifyContent: 'flex-start',
 							alignItems: 'stretch',		// 'flex-start'
 							flexWrap: 'wrap',
 							flexDirection:'column',
 							backgroundColor:'rgba(255, 0, 0, 0.2)'}}>
 				 
-							<img src='1.png' style={{flex:'none', height:50}}/>
+							<UIButton style={{flex:'auto',  backgroundColor:'magenta', width:128, height:128}}
+								title='TEST1'
+								image='ToolAddVoxel.png' 
+								hoverImage='ButtonHover.png' 
+								activeImage='ButtonActive.png'
+								enabled={true}
+
+								onPressed={this._onButtonPressed}
+								onReleased={this._onButtonReleased}
+								onClick={this._onButtonClick}
+								onToggled={this._onButtonToggled}/>
+
+							<UIButton style={{flex:'none', alignSelf:'flex-end', backgroundColor:'magenta', width:128, height:128}}
+								title='TEST2'
+								image='ToolAddVoxel.png' 
+								hoverImage='ButtonHover.png' 
+								activeImage='ButtonActive.png'
+								enabled={true}
+								toggleable = {true}
+
+								onPressed={this._onButtonPressed}
+								onReleased={this._onButtonReleased}
+								onClick={this._onButtonClick}
+								onToggled={this._onButtonToggled}/>
+
+
+							<UIButton style={{flex:'none', alignSelf:'flex-end', backgroundColor:'magenta', width:128, height:128}}
+								title='TEST3'
+								image='ToolAddVoxel.png' 
+								hoverImage='ButtonHover.png' 
+								activeImage='ButtonActive.png'
+								enabled={false}
+								
+								onPressed={this._onButtonPressed}
+								onReleased={this._onButtonReleased}
+								onClick={this._onButtonClick}
+								onToggled={this._onButtonToggled}/>
+						</div>
+					</div>
+				);
+		},
+
+	/*
+		<UIButton style={{flex:'auto', alignSelf:'flex-start', backgroundColor:'magenta', width:'100%'}}
+								image='ToolAddVoxel.png' 
+								hoverImage='ButtonHover.png' 
+								activeImage='ButtonActive.png'/>
+
+					<img src='1.png' style={{flex:'auto', alignSelf:'flex-end'}}/>
 							<img src='2.png' style={{flex:'none', minHeight:50, maxHeight:200}} ref='deux'/>
 							<MySlider style={{flex:'none', backgroundColor:'#FF00FF'}} barWidth={300}/>
 							<img src='3.png' style={{flex:'none', height:50}}/>
@@ -44,18 +90,28 @@ var MyApplication = React.createClass
 							<UISlider style={{flex:'none', alignSelf:'flex-end', backgroundColor:'magenta', width:500}} step={1} />
 							<UIBaseWidget style={{flex:'auto', backgroundColor:'magenta'}}/>
 
-							<UIButton style={{flex:'auto', backgroundColor:'magenta'}}
-								image='ToolAddVoxel.png' hoverImage='ButtonHover.png' activeImage='ButtonActive.png'/>
-						</div>
-					</div>
-				);
+	*/
+
+		_onButtonPressed:function(e)
+		{
+			console.log('_onButtonPressed');
 		},
-		
-		onClick: function(e)
-		{	
-			var element = React.findDOMNode(this.refs.deux);
-			console.log(element.width + ', ' + element.height);
+
+		_onButtonReleased:function(e)
+		{
+			console.log('_onButtonReleased');
 		},
+
+		_onButtonClick:function(e)
+		{
+			console.log('_onButtonClick');
+		},
+
+		_onButtonToggled:function(e)
+		{
+			console.log('_onButtonToggled ' +  e);
+		},
+
 
 		onKnobDragMove: function(e)
 		{
