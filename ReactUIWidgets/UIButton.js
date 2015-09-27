@@ -144,12 +144,16 @@ var UIButton = React.createClass
 			if ( this.props.enabled )
 			{
 				eventHandlers = {
-					onMouseEnter: this._onMouseEnter,
-					onMouseLeave: this._onMouseLeave,
 					onMouseDown: this._onMouseDown,	// The move and up events are handled at document level 
 					onTouchStart: this._onTouchStart,
 					onTouchEnd: this._onTouchEnd,
 				};
+
+				if ( this.props.hoverImage )
+				{
+					eventHandlers["onMouseEnter"] = this._onMouseEnter;
+					eventHandlers["onMouseLeave"] = this._onMouseLeave;
+				}
 			}
 
 			var overlayDiv = React.createElement("div", React.__spread({style: imageStyle},  eventHandlers));
