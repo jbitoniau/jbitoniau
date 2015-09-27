@@ -174,7 +174,7 @@ var UIButton = React.createClass
 		_onMouseEnter: function( e )
 		{
 			this._log("onMouseEnter");
-			//e.stopPropagation();
+			e.stopPropagation();
 			e.preventDefault();		
 			this.setState( {hovered:true} );
 		},
@@ -182,7 +182,7 @@ var UIButton = React.createClass
 		_onMouseLeave: function( e )
 		{
 			this._log("_onMouseLeave");
-			//e.stopPropagation(); 
+			e.stopPropagation(); 
 			e.preventDefault();		
 			this.setState( {hovered:false} );
 		},
@@ -190,7 +190,7 @@ var UIButton = React.createClass
 		_onMouseDown: function( e )
 		{
 			this._log("_onMouseDown");
-			//e.stopPropagation();
+			e.stopPropagation();
 			e.preventDefault();	
 
 			if ( this.state.eventIdentifier!=-1 )	
@@ -198,13 +198,13 @@ var UIButton = React.createClass
 
 			document.addEventListener('mouseup', this._onMouseUp, true);
 			this.setState( {eventIdentifier:1} );
-			this._onPressed();
+			this._onPressed(e);
 		},
 
 		_onMouseUp: function( e )
 		{
 			this._log("_onMouseUp");
-			//e.stopPropagation();
+			e.stopPropagation();
 			e.preventDefault();
 			document.addEventListener('mouseup', this._onMouseUp, true);
 			this.setState( {eventIdentifier:-1} );
@@ -217,7 +217,7 @@ var UIButton = React.createClass
 		_onTouchStart: function(e)
 		{
 			this._log("_onTouchStart id:" + e.changedTouches[0].identifier );			
-			//e.stopPropagation();
+			e.stopPropagation();
 			e.preventDefault();		
 
 			if ( this.state.eventIdentifier!=-1 )	
@@ -225,13 +225,13 @@ var UIButton = React.createClass
 
 			var touchIdentifier = e.changedTouches[0].identifier;
 			this.setState( {eventIdentifier:touchIdentifier} );
-			this._onPressed();
+			this._onPressed(e);
 		},
 
 		_onTouchEnd: function(e)
 		{
 			this._log("_onTouchEnd id:" + e.changedTouches[0].identifier );
-			//e.stopPropagation();
+			e.stopPropagation();
 			e.preventDefault();
 			 
 			if ( !this._touchListContainsIdentifier( e.changedTouches, this.state.eventIdentifier ) )
@@ -256,7 +256,7 @@ var UIButton = React.createClass
 			Common touch/mouse code
 			This is the one-shot click or toggle logic
 		*/
-		_onPressed: function()
+		_onPressed: function(e)
 		{
 			if ( this.props.toggleable )
 			{
@@ -268,7 +268,7 @@ var UIButton = React.createClass
 			}
 
 			if ( this.props.onPressed )
-				this.props.onPressed();
+				this.props.onPressed(e);
 		},
 
 		_onReleased: function()
