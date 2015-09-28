@@ -72,6 +72,7 @@ var UISlider = React.createClass
 				dragStartKnobPosition: 0, 		// Position in pixel relative to knob center where the user started the drag (mouse or touch)
 				knobNormalizedPosition: 0.8, 	// Position expressed between 0 and 1 and converted into CSS percentage so it's correct on resize
 				eventIdentifier: UIButton.noEventIdentifier,
+				lastSliderValue: null, 			// Used to send notifications only when value changes
 			};
 		},
 	
@@ -168,6 +169,7 @@ var UISlider = React.createClass
 //			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
 //				return;	// An event is already being processed
 			this._knobDragStart( e.clientX, e.clientY, UIButton.mouseEventIdentifier );
+			this._knobDragMove( e.clientX, e.clientY );
 
 			e.preventDefault();
 			e.stopPropagation();
@@ -221,6 +223,7 @@ var UISlider = React.createClass
 //				return;	// An event is already being processed
 			var touch = e.changedTouches[0];
 			this._knobDragStart( touch.clientX, touch.clientY, touch.identifier );
+			this._knobDragMove( touch.clientX, touch.clientY );
 
 			e.preventDefault();
 			e.stopPropagation();
@@ -337,8 +340,13 @@ var UISlider = React.createClass
 
 			// Notify client code
 			var sliderValue = this._getSliderValueFromKnobNormalizedPosition( knobNormalizedPosition );
-			if ( this.props.onKnobDragMove )
-				this.props.onKnobDragMove(sliderValue);
+			var lastSliderValue = this.state.lastSliderValue;
+			if ( !lastSliderValue || sliderValue!=lastSliderValue )
+			{
+				if ( this.props.onKnobDragMove )
+					this.props.onKnobDragMove(sliderValue);
+				this.setState( {lastSliderValue:sliderValue} );
+			}
 		},
 		
 		_knobDragEnd: function()
@@ -350,6 +358,7 @@ var UISlider = React.createClass
 			}
 			this.setState( {dragStartKnobPosition:0});
 			this.setState( {eventIdentifier:UIButton.noEventIdentifier});
+			this.setState( {lastSliderValue:null} );
 
 			// Notify client code
 			var sliderValue = this._getSliderValueFromKnobNormalizedPosition( this.state.knobNormalizedPosition );
