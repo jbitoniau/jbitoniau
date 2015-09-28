@@ -36,7 +36,7 @@ var MyApplication = React.createClass
 							onToggled={this._onButtonToggled}/>
 
 						<UISlider style={{flex:'none', backgroundColor:'magenta'}} 
-							knobHeight={64} knobWidth={64} min={5} max={15} step={0}
+							knobHeight={64} knobWidth={64} min={5} max={15} step={2}
 							
 							knobImage='SliderKnob.png'
 							onKnobDragMove={this.onKnobDragMove}
