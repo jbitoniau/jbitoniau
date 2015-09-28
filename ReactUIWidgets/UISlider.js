@@ -9,9 +9,12 @@
 // Event generated need to give more info: which instance of UISlider is calling, etc...
 // Vertical or horizontal
 // Could use a UIButton as a knob in theory (the button should provide info about where it was clicked...)
+// Or at least have the knob reuse common code as UIButton (layers of images with hover handling and active state)
 // Note explaining element.mouseDown and document.mouseMove/mouseUp!!!
 // When a touch interaction happens. Only react to the identifier of the touch. If a mouse interaction happens, cancel touch
 // and reciprocally
+
+// Handle title
 var UISlider = React.createClass
 (
 	{displayName: "UISlider",
@@ -35,6 +38,8 @@ var UISlider = React.createClass
 			knobWidth: React.PropTypes.number,
 			knobHeight: React.PropTypes.number,
 			knobImage: React.PropTypes.string,
+			knobHoverImage: React.PropTypes.string,
+			knobActiveImage: React.PropTypes.string,
 
 			onKnobDragMove: React.PropTypes.func,
 			onKnobDragEnd: React.PropTypes.func,
@@ -50,7 +55,9 @@ var UISlider = React.createClass
 				knobWidth: 32,
 				knobHeight: 32,
 				knobImage: null,
-	
+				knobHoverImage: null,
+				knobActiveImage: null,
+
 				onKnobDragMove: null,
 				onKnobDragEnd: null,
 			};
@@ -66,7 +73,7 @@ var UISlider = React.createClass
 	
 		render: function() 
 		{
-			this._setDebugActive(true);
+			//this._setDebugActive(true);
 			this._log( "render " + JSON.stringify( this.state ) );
 
 			var sliderValue =this._getSliderValueFromKnobNormalizedPosition(this.state.knobNormalizedPosition);
@@ -91,15 +98,14 @@ var UISlider = React.createClass
 								flexDirection:'column',
 								justifyContent:'center',
 								alignItems:'stretch'} );
-
 			return ( 
 						
 					// Main Div placing centering its unique child vertically with flex
 					React.createElement("div", {style: mainDivStyle, 
 						onMouseDown: this._onBarMouseDown, 
-										onTouchStart: this._onBarTouchStart, 
-										onTouchMove: this._onBarTouchMove, 
-										onTouchEnd: this._onBarTouchEnd}, 
+						onTouchStart: this._onBarTouchStart, 
+						onTouchMove: this._onBarTouchMove, 
+						onTouchEnd: this._onBarTouchEnd}, 
 
 						/* The rectangle with fixed height for the bar and the knob */ 
 						React.createElement("div", {style: {flex:'none', height:barThickness}}, 
@@ -114,7 +120,7 @@ var UISlider = React.createClass
 										bottom:0,
 										backgroundColor:UISlider.barBackgroundColor,
 										borderRadius:UISlider.barBorderRadius}, 
-										
+										title: this.props.title, 
 										ref: "sliderBar"}, 
 									React.createElement("div", {style: {position:'relative', width:'100%', height:'100%'}}, 
 								
@@ -127,19 +133,18 @@ var UISlider = React.createClass
 											ref: "sliderKnobAnchor"}, 
 										
 											/* The knob image (correctly centered on parent anchor) */
-											React.createElement("div", {style: {
-												position:'relative', 
+											React.createElement("img", {style: {position:'relative', 
 												top:-knobHeight/2, 
 												left:-knobWidth/2, 
 												width:knobWidth, 
-												height:knobHeight,
-												background:'red'}, 
+												height:knobHeight}, 
+												title: this.props.title, 
+												src: this.props.knobImage, 
 												onMouseDown: this._onKnobMouseDown, 
 												onTouchStart: this._onKnobTouchStart, 
 												onTouchMove: this._onKnobTouchMove, 
 												onTouchEnd: this._onKnobTouchEnd, 
-												ref: "sliderKnob"}
-											)
+												ref: "sliderKnob"})
 										)
 									)
 								)
@@ -155,8 +160,10 @@ var UISlider = React.createClass
 		_onKnobMouseDown : function(e)
 		{
 			this._log("_onKnobMouseDown");
-			e.preventDefault();
-			e.stopPropagation();
+			if ( e.preventDefault )	// When I tried to use a <UIButton> for the knob instead of a basic <img>. Its event params is simpler
+				e.preventDefault();
+			if ( e.stopPropagation )
+				e.stopPropagation();
 			document.addEventListener('mousemove', this._onKnobMouseMove, true);
 			document.addEventListener('mouseup', this._onKnobMouseUp, true);
 			this._knobDragStart( e.clientX, e.clientY );

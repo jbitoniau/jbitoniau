@@ -25,7 +25,7 @@ var MyApplication = React.createClass
 						<UIButton style={{flex:'none', backgroundColor:'magenta', width:64, height:64}}
 							title='TEST2'
 							image='ToolAddVoxel.png' 
-							hoverImage='ButtonHover.png' 
+							hoverImage='ButtonHover.png'
 							activeImage='ButtonActive.png'
 							enabled={true}
 							toggleable = {true}
@@ -37,8 +37,12 @@ var MyApplication = React.createClass
 
 						<UISlider style={{flex:'none', backgroundColor:'magenta'}} 
 							knobHeight={64} knobWidth={64} min={5} max={15} step={0}
+							
+							knobImage='SliderKnob.png'
 							onKnobDragMove={this.onKnobDragMove}
-							onKnobDragEnd={this.onKnobDragEnd}/>
+							onKnobDragEnd={this.onKnobDragEnd}>
+							
+						</UISlider>
 					</div>
 				);
 		},
@@ -63,24 +67,23 @@ var MyApplication = React.createClass
 
 		_onButtonPressed:function(e)
 		{
-			console.log('_onButtonPressed');
+			console.log('_onButtonPressed ' + JSON.stringify(e) );
 		},
 
 		_onButtonReleased:function(e)
 		{
-			console.log('_onButtonReleased');
+			console.log('_onButtonReleased ' + JSON.stringify(e) );
 		},
 
 		_onButtonClick:function(e)
 		{
-			console.log('_onButtonClick');
+			console.log('_onButtonClick ' + JSON.stringify(e));
 		},
 
 		_onButtonToggled:function(e)
 		{
-			console.log('_onButtonToggled ' +  e);
+			console.log('_onButtonToggled ' + JSON.stringify(e));
 		},
-
 
 		onKnobDragMove: function(e)
 		{
