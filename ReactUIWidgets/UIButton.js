@@ -90,7 +90,7 @@ var UIButton = React.createClass
 			// Being disabled is not a state but a prop
 			return {
 						hovered: false,	// The mouse is hovering above the button
-						active: false,	// The button is active, it's being pressed (if one-shot button), or it's toggled (if toggle button)
+						active: false,	// The button is active, it's being pressed (if one-shot button), or it's toggled (if toggle button)						eventIdentifier: UIButton.noEventIdentifier,	// Identify the mouse or touch event being currently processed
 						eventIdentifier: UIButton.noEventIdentifier,	// Identify the mouse or touch event being currently processed
 					};	
 		},

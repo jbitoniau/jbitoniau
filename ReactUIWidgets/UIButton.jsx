@@ -39,6 +39,9 @@ var UIButton = React.createClass
 		{
 			opacityWhenDisabled:0.4,
 			pixelsShiftWhenActive:1,
+
+			noEventIdentifier:-1,
+			mouseEventIdentifier:-5,
 		},
 
 		propTypes:
@@ -87,8 +90,8 @@ var UIButton = React.createClass
 			// Being disabled is not a state but a prop
 			return {
 						hovered: false,	// The mouse is hovering above the button
-						active: false,	// The button is active, it's being pressed (if one-shot button), or it's toggled (if toggle button)
-						eventIdentifier: -1,	// Identify the mouse (1) or touch (touch.identifier) event being currently processed
+						active: false,	// The button is active, it's being pressed (if one-shot button), or it's toggled (if toggle button)						eventIdentifier: UIButton.noEventIdentifier,	// Identify the mouse or touch event being currently processed
+						eventIdentifier: UIButton.noEventIdentifier,	// Identify the mouse or touch event being currently processed
 					};	
 		},
 		
@@ -197,12 +200,13 @@ var UIButton = React.createClass
 			e.stopPropagation();
 			e.preventDefault();	
 
-			if ( this.state.eventIdentifier!=-1 )	
+			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
 				return;	// An event is already being processed
 
 			document.addEventListener('mouseup', this._onMouseUp, true);
-			this.setState( {eventIdentifier:1} );
-			this._onPressed(e);
+			this.setState( {eventIdentifier:UIButton.mouseEventIdentifier} );
+			var eventParams = this._makeMouseEventParams(e);
+			this._onPressed(eventParams);
 		},
 
 		_onMouseUp: function( e )
@@ -210,9 +214,23 @@ var UIButton = React.createClass
 			this._log("_onMouseUp");
 			e.stopPropagation();
 			e.preventDefault();
+			
+			if ( this.state.eventIdentifier!=UIButton.mouseEventIdentifier )	
+				return;
+
 			document.addEventListener('mouseup', this._onMouseUp, true);
-			this.setState( {eventIdentifier:-1} );
-			this._onReleased();
+			this.setState( {eventIdentifier:UIButton.noEventIdentifier} );
+			var eventParams = this._makeMouseEventParams(e);
+			this._onReleased(eventParams);
+		},
+
+		_makeMouseEventParams: function( e )
+		{
+			var eventParams = {
+					clientX: e.clientX,
+					clientY: e.clientY,
+				};
+			return eventParams;
 		},
 
 		/*
@@ -224,12 +242,13 @@ var UIButton = React.createClass
 			e.stopPropagation();
 			e.preventDefault();		
 
-			if ( this.state.eventIdentifier!=-1 )	
+			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
 				return;		// An event is already being processed
 
 			var touchIdentifier = e.changedTouches[0].identifier;
 			this.setState( {eventIdentifier:touchIdentifier} );
-			this._onPressed(e);
+			var eventParams = this._makeTouchEventParams( e.changedTouches, touchIdentifier );
+			this._onPressed(eventParams);
 		},
 
 		_onTouchEnd: function(e)
@@ -237,30 +256,37 @@ var UIButton = React.createClass
 			this._log("_onTouchEnd id:" + e.changedTouches[0].identifier );
 			e.stopPropagation();
 			e.preventDefault();
-			 
-			if ( !this._touchListContainsIdentifier( e.changedTouches, this.state.eventIdentifier ) )
-				return;
+
+			var eventParams = this._makeTouchEventParams( e.changedTouches, this.state.eventIdentifier );
+			if ( !eventParams )
+				return;		// This touch event doesn't concern the touch we're tracking
 			
-			this.setState( {eventIdentifier:-1} );
-			this._onReleased();
+			this.setState( {eventIdentifier:UIButton.noEventIdentifier} );
+			this._onReleased(eventParams);
 		},
 
-		_touchListContainsIdentifier: function( touchList, identifier )
+		_makeTouchEventParams: function( touchList, identifier )
 		{
 			var n = touchList.length;
 			for ( var i=0; i<n; ++i )
 			{
 				if ( touchList[i].identifier==identifier )
-					return true;
+				{
+					var eventParams = {
+							clientX: touchList[i].clientX,
+							clientY: touchList[i].clientY,
+						};
+					return eventParams;
+				}
 			}
-			return false;
+			return null;
 		},
 
 		/*
 			Common touch/mouse code
 			This is the one-shot click or toggle logic
 		*/
-		_onPressed: function(e)
+		_onPressed: function(eventParams)
 		{
 			if ( this.props.toggleable )
 			{
@@ -272,26 +298,27 @@ var UIButton = React.createClass
 			}
 
 			if ( this.props.onPressed )
-				this.props.onPressed(e);
+				this.props.onPressed(eventParams);
 		},
 
-		_onReleased: function()
+		_onReleased: function(eventParams)
 		{
 			if ( this.props.toggleable )
 			{
 				var toggled = this.state.active;
+				eventParams['toggled'] = toggled;
 				if ( this.props.onToggled )
-					this.props.onToggled( toggled );
+					this.props.onToggled(eventParams);
 			}
 			else
 			{
 				this.setState( {active:false} );
 				if ( this.props.onClick )
-					this.props.onClick();
+					this.props.onClick(eventParams);
 			}
 
 			if ( this.props.onReleased )
-				this.props.onReleased();
+				this.props.onReleased(eventParams);
 		},
 	}
 );
