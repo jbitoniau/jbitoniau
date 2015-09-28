@@ -26,7 +26,10 @@ var UISlider = React.createClass
 			// but we could make them more flexible if needed.
 			barThickness: 10,
 			barBackgroundColor: 'black',
-			barBorderRadius: 4
+			barBorderRadius: 4,
+
+			noEventIdentifier:-1,
+			mouseEventIdentifier:-5,
 		},
 
 		propTypes: 
@@ -68,6 +71,7 @@ var UISlider = React.createClass
 			return { 
 				dragStartKnobPosition: 0, 		// Position in pixel relative to knob center where the user started the drag (mouse or touch)
 				knobNormalizedPosition: 0.8, 	// Position expressed between 0 and 1 and converted into CSS percentage so it's correct on resize
+				eventIdentifier: UIButton.noEventIdentifier,
 			};
 		},
 	
@@ -160,42 +164,50 @@ var UISlider = React.createClass
 		_onKnobMouseDown : function(e)
 		{
 			this._log("_onKnobMouseDown");
-			if ( e.preventDefault )	// When I tried to use a <UIButton> for the knob instead of a basic <img>. Its event params is simpler
-				e.preventDefault();
-			if ( e.stopPropagation )
-				e.stopPropagation();
-			document.addEventListener('mousemove', this._onKnobMouseMove, true);
-			document.addEventListener('mouseup', this._onKnobMouseUp, true);
-			this._knobDragStart( e.clientX, e.clientY );
+
+//			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
+//				return;	// An event is already being processed
+			this._knobDragStart( e.clientX, e.clientY, UIButton.mouseEventIdentifier );
+
+			e.preventDefault();
+			e.stopPropagation();
 		},
 
 		_onKnobMouseMove: function(e)
 		{
 			this._log("_onKnobMouseMove");
+			
+			if ( this.state.eventIdentifier!=UIButton.mouseEventIdentifier )	
+				return;
+			this._knobDragMove( e.clientX, e.clientY );
+
 			e.preventDefault();
 			e.stopPropagation();
-			this._knobDragMove( e.clientX, e.clientY );
 		},
 
 		_onKnobMouseUp: function(e)
 		{	
 			this._log("_onKnobMouseUp");
+			
+			if ( this.state.eventIdentifier!=UIButton.mouseEventIdentifier )	
+				return;
+			this._knobDragEnd();
+	
 			e.preventDefault();
 			e.stopPropagation();
-			document.removeEventListener('mousemove', this._onKnobMouseMove, true);
-			document.removeEventListener('mouseup', this._onKnobMouseUp, true);
-			this._knobDragEnd();
 		},
 
 		_onBarMouseDown: function(e)
 		{
 			this._log("_onBarMouseDown");
+
+//			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
+//				return;
+			this._knobDragStart( null, null, UIButton.mouseEventIdentifier );
+			this._knobDragMove( e.clientX, e.clientY );
+
 			e.preventDefault();
 			e.stopPropagation();
-			this.setState( {dragStartKnobPosition:0} );
-			this._knobDragMove( e.clientX, e.clientY );
-			document.addEventListener('mousemove', this._onKnobMouseMove, true);
-			document.addEventListener('mouseup', this._onKnobMouseUp, true);
 		},
 
 		/*
@@ -204,34 +216,54 @@ var UISlider = React.createClass
 		_onKnobTouchStart: function(e)
 		{
 			this._log("_onKnobTouchStart");
+			
+//			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
+//				return;	// An event is already being processed
+			var touch = e.changedTouches[0];
+			this._knobDragStart( touch.clientX, touch.clientY, touch.identifier );
+
 			e.preventDefault();
 			e.stopPropagation();
-			this._knobDragStart( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
 		},
 
 		_onKnobTouchMove: function(e)
 		{
 			this._log("_onKnobTouchMove");
+			
+			var touch = this._getTouchFromIdentifier( e.changedTouches, this.state.eventIdentifier );
+			if ( !touch )
+				return;
+			this._knobDragMove( touch.clientX, touch.clientY );
+
 			e.preventDefault();
 			e.stopPropagation();
-			this._knobDragMove( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
 		},
 
 		_onKnobTouchEnd: function(e)
 		{
 			this._log("_onKnobTouchEnd");
+			
+			var touch = this._getTouchFromIdentifier( e.changedTouches, this.state.eventIdentifier );
+			if ( !touch )
+				return;
+			this._knobDragEnd();
+
 			e.preventDefault();
 			e.stopPropagation();
-			this._knobDragEnd();
 		},
 
 		_onBarTouchStart: function(e)
 		{
 			this._log("_onBarTouchStart");
+			
+//			if ( this.state.eventIdentifier!=UIButton.noEventIdentifier )	
+//				return;	// An event is already being processed
+			var touch = e.changedTouches[0];
+			this._knobDragStart( null, null, touch.identifier );
+			this._knobDragMove( touch.clientX, touch.clientY );
+
 			e.preventDefault();
 			e.stopPropagation();
-			this.setState( {dragStartKnobPosition:0} );
-			this._knobDragMove( e.changedTouches[0].clientX, e.changedTouches[0].clientY );
 		},
 
 		_onBarTouchMove: function(e)
@@ -246,17 +278,42 @@ var UISlider = React.createClass
 			this._onKnobTouchEnd(e);
 		},
 
+		_getTouchFromIdentifier: function( touchList, identifier )
+		{
+			var n = touchList.length;
+			for ( var i=0; i<n; ++i )
+			{
+				if ( touchList[i].identifier==identifier )
+					return touchList[i];
+			}
+			return null;
+		},
+
 		/*	
 			Common mouse/touch code
 		*/
-		_knobDragStart: function(x, y)
+		_knobDragStart: function(x, y, eventIdentifier)
 		{
-			var sliderKnobAnchor =  this._getElement('sliderKnobAnchor');
-			var mousePosInKnob = this._convertDocumentPositionToElementPosition( x, y, sliderKnobAnchor );
-			if ( !mousePosInKnob )
-				return;
-			var mousePosInKnobX = mousePosInKnob[0];
-			this.setState( {dragStartKnobPosition:mousePosInKnobX} );
+			if ( x && y )
+			{
+				var sliderKnobAnchor =  this._getElement('sliderKnobAnchor');
+				var mousePosInKnob = this._convertDocumentPositionToElementPosition( x, y, sliderKnobAnchor );
+				if ( !mousePosInKnob )
+					return;
+				var mousePosInKnobX = mousePosInKnob[0];
+				this.setState( {dragStartKnobPosition:mousePosInKnobX} );
+			}
+			else
+			{
+				this.setState( {dragStartKnobPosition:0} );	
+			}
+
+			this.setState( {eventIdentifier:eventIdentifier} );
+			if ( eventIdentifier==UIButton.mouseEventIdentifier )
+			{
+				document.addEventListener('mousemove', this._onKnobMouseMove, true);
+				document.addEventListener('mouseup', this._onKnobMouseUp, true);
+			}
 		},
 
 		_knobDragMove: function(x, y)
@@ -284,9 +341,15 @@ var UISlider = React.createClass
 				this.props.onKnobDragMove(sliderValue);
 		},
 		
-		_knobDragEnd: function(x, y)
+		_knobDragEnd: function()
 		{
+			if ( this.state.eventIdentifier==UIButton.mouseEventIdentifier )
+			{
+				document.removeEventListener('mousemove', this._onKnobMouseMove, true);
+				document.removeEventListener('mouseup', this._onKnobMouseUp, true);
+			}
 			this.setState( {dragStartKnobPosition:0});
+			this.setState( {eventIdentifier:UIButton.noEventIdentifier});
 
 			// Notify client code
 			var sliderValue = this._getSliderValueFromKnobNormalizedPosition( this.state.knobNormalizedPosition );

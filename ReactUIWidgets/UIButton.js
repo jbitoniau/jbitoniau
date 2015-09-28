@@ -39,6 +39,7 @@ var UIButton = React.createClass
 		{
 			opacityWhenDisabled:0.4,
 			pixelsShiftWhenActive:1,
+
 			noEventIdentifier:-1,
 			mouseEventIdentifier:-5,
 		},
@@ -90,7 +91,7 @@ var UIButton = React.createClass
 			return {
 						hovered: false,	// The mouse is hovering above the button
 						active: false,	// The button is active, it's being pressed (if one-shot button), or it's toggled (if toggle button)
-						eventIdentifier: -1,	// Identify the mouse (1) or touch (touch.identifier) event being currently processed
+						eventIdentifier: UIButton.noEventIdentifier,	// Identify the mouse or touch event being currently processed
 					};	
 		},
 		
@@ -213,6 +214,10 @@ var UIButton = React.createClass
 			this._log("_onMouseUp");
 			e.stopPropagation();
 			e.preventDefault();
+			
+			if ( this.state.eventIdentifier!=UIButton.mouseEventIdentifier )	
+				return;
+
 			document.addEventListener('mouseup', this._onMouseUp, true);
 			this.setState( {eventIdentifier:UIButton.noEventIdentifier} );
 			var eventParams = this._makeMouseEventParams(e);
