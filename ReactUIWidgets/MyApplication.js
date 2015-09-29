@@ -51,7 +51,8 @@ var MyApplication = React.createClass({
 				onPressed: this._onButtonPressed,
 				onReleased: this._onButtonReleased,
 				onClick: this._onButtonClick,
-				onToggled: this._onButtonToggled })
+				onToggled: this._onButtonToggled }),
+			React.createElement(UITextbox, { style: { flex: 'none', backgroundColor: 'magenta' }, value: 'Some text here' })
 		);
 	},
 

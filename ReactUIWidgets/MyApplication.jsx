@@ -57,6 +57,8 @@ var MyApplication = React.createClass
 							onReleased={this._onButtonReleased}
 							onClick={this._onButtonClick}
 							onToggled={this._onButtonToggled}/>
+
+						<UITextbox style={{flex:'none', backgroundColor:'magenta'}} value='Some text here'/>
 					</div>
 				);
 		},
