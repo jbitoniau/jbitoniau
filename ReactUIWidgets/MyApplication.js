@@ -15,7 +15,7 @@ var MyApplication = React.createClass({
 					left: 5,
 
 					display: 'flex',
-					justifyContent: 'flex-start',
+					justifyContent: 'space-between',
 					alignItems: 'stretch', // 'flex-start'
 					flexWrap: 'wrap',
 					flexDirection: 'column',
@@ -52,7 +52,30 @@ var MyApplication = React.createClass({
 				onReleased: this._onButtonReleased,
 				onClick: this._onButtonClick,
 				onToggled: this._onButtonToggled }),
-			React.createElement(UITextbox, { style: { flex: 'none', backgroundColor: 'magenta' }, value: 'Some text here' })
+			React.createElement(UITextbox, { style: {
+					flex: 'none',
+					backgroundColor: 'magenta',
+					fontFamily: 'verdana',
+					fontSize: 20,
+					width: 200 },
+				value: 'Some text here' }),
+			React.createElement(UITextbox, { style: {
+					flex: 'none',
+					backgroundColor: 'magenta',
+					margin: 0,
+					fontFamily: 'sans-serif',
+					fontSize: '18px',
+					appearance: 'none',
+					boxShadow: 'none',
+					borderRadius: 'none',
+					outline: 'none',
+					WebkitAppearance: 'none',
+					border: 'solid 1px red',
+					padding: 0 },
+				value: 'More text here' }),
+			React.createElement(UIColorPicker, { style: {
+					flex: 'auto',
+					backgroundColor: 'magenta' } })
 		);
 	},
 
