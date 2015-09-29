@@ -49,6 +49,7 @@ var UIButton = React.createClass
 			enabled: React.PropTypes.bool,
 			toggleable: React.PropTypes.bool,
 
+			colorSwatch: React.PropTypes.string,
 			image: React.PropTypes.string.isRequired,
 			hoverImage: React.PropTypes.string,
 			activeImage: React.PropTypes.string,
@@ -69,6 +70,7 @@ var UIButton = React.createClass
 				enabled: true,
 				toggleable: false,
 				
+				colorSwatch: null,
 				image: null,
 				hoverImage: null,
 				activeImage: null,
@@ -133,14 +135,34 @@ var UIButton = React.createClass
 				}
 			}
 
-			var image = <img src={this.props.image} style={imageStyle} />;
-			
+			var image = null;
+			if ( this.props.image ) 
+				image = <img src={this.props.image} style={imageStyle} />;
+
 			var hoverImage = null;
-			if ( this.state.hovered )
+			if ( this.state.hovered && this.props.hoverImage ) 	// There's most probably an hoverImage otherwise we wouldn't be in the state (maybe unless the state has been set externally by code?)
 				hoverImage = <img src={this.props.hoverImage} style={imageStyle} />;
 
+			var colorSwatch = null;
+			if ( this.props.colorSwatch )
+			{
+				var hm = 0;
+				if ( this.props.colorSwatchMargin )
+					hm = this.props.colorSwatchMargin / 2;
+				var br = 0;
+				if ( this.props.colorSwatchBorderRadius )
+					br = this.props.colorSwatchBorderRadius;
+				colorSwatch = ( 
+					<div style={imageStyle}>
+						<div style={{position:'relative', width:'100%', height:'100%'}}>
+							<div style={{position:'absolute', top:hm, bottom:hm, left:hm, right:hm, backgroundColor:this.props.colorSwatch, borderRadius:br }}>
+							</div>
+						</div>
+					</div> ); 
+			}
+
 			var activeImage = null;
-			if ( this.state.active )
+			if ( this.state.active && this.props.activeImage )
 				activeImage = <img src={this.props.activeImage} style={imageStyle} />;
 	
 			var eventHandlers = {};
@@ -166,6 +188,7 @@ var UIButton = React.createClass
 				<div style={mainDivStyle} title={this.props.title}>
 
 					{image}
+					{colorSwatch}
 					{hoverImage}
 					{activeImage}
 					{overlayDiv}

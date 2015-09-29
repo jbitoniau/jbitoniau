@@ -1,319 +1,278 @@
 'use strict';
 
-var MySlider = React.createClass
-(
-	{displayName: "MySlider",
-		propTypes: 
-		{
-			min: React.PropTypes.number,
-			max: React.PropTypes.number,
-			step: React.PropTypes.number,
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-			//onKnobDragStart: React.PropTypes.func,
-			onKnobDragMove: React.PropTypes.func,
-			onKnobDragEnd: React.PropTypes.func,
-			
-			barWidth: React.PropTypes.number,
-			barHeight: React.PropTypes.number,
-			knobWidth: React.PropTypes.number,
-			knobHeight: React.PropTypes.number,
-			knobImage: React.PropTypes.string,
-		},
+var MySlider = React.createClass({
+	displayName: 'MySlider',
 
-		getDefaultProps: function()
-		{
-			return { 
-					min: 0,
-					max: 10,
-					step: 1,
+	propTypes: {
+		min: React.PropTypes.number,
+		max: React.PropTypes.number,
+		step: React.PropTypes.number,
 
-					//onKnobDragStart: null,
-					onKnobDragMove: null,
-					onKnobDragEnd: null,
-					
-					barWidth: 300,
-					barHeight: 20,
-					knobWidth: 64,
-					knobHeight: 64,
-					knobImage: null,
-				};
-		},
+		//onKnobDragStart: React.PropTypes.func,
+		onKnobDragMove: React.PropTypes.func,
+		onKnobDragEnd: React.PropTypes.func,
 
-		getInitialState: function()
-		{
-			return { 
-					knobPosition:0,
-					knobDragPointX:0,	// Relative to center of knob
-					knobDragPointY:0 	// NOTE: this is not used at the moment
-				};
-		},
-	
-		render: function() 
-		{
-			console.log( JSON.stringify(this.state) );
+		barWidth: React.PropTypes.number,
+		barHeight: React.PropTypes.number,
+		knobWidth: React.PropTypes.number,
+		knobHeight: React.PropTypes.number,
+		knobImage: React.PropTypes.string
+	},
 
-			var barWidth = this.props.barWidth;
-			var barHeight = this.props.barHeight;
-			var knobWidth = this.props.knobWidth;
-			var knobHeight = this.props.knobHeight;
+	getDefaultProps: function getDefaultProps() {
+		return {
+			min: 0,
+			max: 10,
+			step: 1,
 
+			//onKnobDragStart: null,
+			onKnobDragMove: null,
+			onKnobDragEnd: null,
 
-//			var knobPosX = this.state.knobPosition - (knobWidth/2);
-var value =this._getSliderValue( this.state.knobPosition );
-var knobPosX = this._getKnobPositionFromSliderValue(value);
+			barWidth: 300,
+			barHeight: 20,
+			knobWidth: 64,
+			knobHeight: 64,
+			knobImage: null
+		};
+	},
 
-			var knobPosY = (barHeight/2) - (knobHeight/2);
+	getInitialState: function getInitialState() {
+		return {
+			knobPosition: 0,
+			knobDragPointX: 0, // Relative to center of knob
+			knobDragPointY: 0 // NOTE: this is not used at the moment
+		};
+	},
 
-			var sliderWidth = barWidth + knobWidth;
-			var sliderHeight = barHeight>knobHeight ? barHeight : knobHeight;
+	render: function render() {
+		console.log(JSON.stringify(this.state));
 
-			var knobProps = {
-						style:{ position:'absolute', 
-								left:knobPosX+(knobWidth/2), 
-								top:(sliderHeight/2) - (knobHeight/2), 
-								width:knobWidth, 
-								height:knobHeight, },	
-						onMouseDown: this._onKnobMouseDown,	// onMouseUp and onMouseMove are handled at the document level to work outside the knob area
-						onTouchStart: this._onKnobTouchStart,
-						onTouchMove: this._onKnobTouchMove,
-						ref: 'knobElement'
-					};
+		var barWidth = this.props.barWidth;
+		var barHeight = this.props.barHeight;
+		var knobWidth = this.props.knobWidth;
+		var knobHeight = this.props.knobHeight;
 
-			if ( !this.props.knobImage )
-			{
-				knobProps.style['backgroundColor'] = '#000000';
-				knobProps.style['borderRadius'] = 8;
-			}
+		//			var knobPosX = this.state.knobPosition - (knobWidth/2);
+		var value = this._getSliderValue(this.state.knobPosition);
+		var knobPosX = this._getKnobPositionFromSliderValue(value);
 
-			return (
-					React.createElement("div", {style: { flex:'auto',
-									position:'relative',
-									minWidth:sliderWidth, minHeight:sliderHeight,
-									maxWidth:sliderWidth, maxHeight:sliderHeight,
-									width:sliderWidth, 
-									height:sliderHeight}, 
-							onMouseDown: this._onBarMouseDown, 		// Not really the 'bar' here... but more the 'mainElement' div
-							onTouchStart: this._onBarTouchStart, 
-							onTouchMove: this._onBarTouchMove, 
-							onTouchEnd: this._onBarTouchEnd, 
-							ref: "mainElement"}, 
-					
-						React.createElement("div", {style: {position:'absolute', 
-										left:knobWidth/2, 
-										top:(sliderHeight/2) - (barHeight/2), 
-										width:barWidth, 
-										height:barHeight, 
-										backgroundColor:'grey'}, 
-								
-								ref: "barElement"}
-						), 
+		var knobPosY = barHeight / 2 - knobHeight / 2;
 
-						
-							this.props.knobImage ?
-								React.createElement("img", React.__spread({},  knobProps, {src: this.props.knobImage}))
-							:
-								React.createElement("div", React.__spread({},  knobProps))
-						
+		var sliderWidth = barWidth + knobWidth;
+		var sliderHeight = barHeight > knobHeight ? barHeight : knobHeight;
 
-					)
-				);
-		},
+		var knobProps = {
+			style: { position: 'absolute',
+				left: knobPosX + knobWidth / 2,
+				top: sliderHeight / 2 - knobHeight / 2,
+				width: knobWidth,
+				height: knobHeight },
+			onMouseDown: this._onKnobMouseDown, // onMouseUp and onMouseMove are handled at the document level to work outside the knob area
+			onTouchStart: this._onKnobTouchStart,
+			onTouchMove: this._onKnobTouchMove,
+			ref: 'knobElement'
+		};
 
-		_getKnobPositionFromSliderValue: function( sliderValue )
-		{
-			var min = this.props.min;
-			var max = this.props.max;
-			var barWidth = this.props.barWidth;
-			var knobWidth = this.props.knobWidth;
-			var pos = ( barWidth * (sliderValue - min) / (max-min) ) - (knobWidth/2);
-			return pos;
-		},
+		if (!this.props.knobImage) {
+			knobProps.style['backgroundColor'] = '#000000';
+			knobProps.style['borderRadius'] = 8;
+		}
 
-		_getSliderValue: function( knobPosition )
-		{
-			var min = this.props.min;
-			var max = this.props.max;
-			var step = this.props.step;
-			var barWidth = this.props.barWidth;
-			var normalizedPos = knobPosition / barWidth;
+		return React.createElement(
+			'div',
+			{ style: { flex: 'auto',
+					position: 'relative',
+					minWidth: sliderWidth, minHeight: sliderHeight,
+					maxWidth: sliderWidth, maxHeight: sliderHeight,
+					width: sliderWidth,
+					height: sliderHeight },
+				onMouseDown: this._onBarMouseDown, // Not really the 'bar' here... but more the 'mainElement' div
+				onTouchStart: this._onBarTouchStart,
+				onTouchMove: this._onBarTouchMove,
+				onTouchEnd: this._onBarTouchEnd,
+				ref: 'mainElement' },
+			React.createElement('div', { style: { position: 'absolute',
+					left: knobWidth / 2,
+					top: sliderHeight / 2 - barHeight / 2,
+					width: barWidth,
+					height: barHeight,
+					backgroundColor: 'grey' },
 
-			var value = ( normalizedPos * (max-min) );
-			if ( step!=0 )
-				value = this._roundValueTo( value, step );
-			value += min;
-			return value;
-		},
+				ref: 'barElement' }),
+			this.props.knobImage ? React.createElement('img', _extends({}, knobProps, { src: this.props.knobImage })) : React.createElement('div', knobProps)
+		);
+	},
 
-		_roundValueTo: function( value, step )
-		{
-			var n = Math.round( value / step );
-			var v = n * step;
-			return v;
-		},
+	_getKnobPositionFromSliderValue: function _getKnobPositionFromSliderValue(sliderValue) {
+		var min = this.props.min;
+		var max = this.props.max;
+		var barWidth = this.props.barWidth;
+		var knobWidth = this.props.knobWidth;
+		var pos = barWidth * (sliderValue - min) / (max - min) - knobWidth / 2;
+		return pos;
+	},
 
-		_documentToSliderElementPosition : function( x, y, sliderElementRefName )
-		{
-			var sliderElement = React.findDOMNode(this.refs[sliderElementRefName]);
-			if ( !sliderElement )
-				return null;
-			var rect = sliderElement.getBoundingClientRect();
-			var sliderElementX = x - rect.left;
-			var sliderElementY = y - rect.top;
-			return [sliderElementX, sliderElementY];
-		},
+	_getSliderValue: function _getSliderValue(knobPosition) {
+		var min = this.props.min;
+		var max = this.props.max;
+		var step = this.props.step;
+		var barWidth = this.props.barWidth;
+		var normalizedPos = knobPosition / barWidth;
 
-		_knobDragStart: function(x, y)
-		{
-			var knobPos = this._documentToSliderElementPosition( x, y, 'knobElement');
-			if ( !knobPos )
-				return;
-			var knobPosX = knobPos[0] - ( this.props.knobWidth/2 );
-			var knobPosY = knobPos[1] - ( this.props.knobHeight/2 );
-			this.setState( {knobDragPointX:knobPosX, knobDragPointY:knobPosY });	// The position is relative to the knob center
-		},
+		var value = normalizedPos * (max - min);
+		if (step != 0) value = this._roundValueTo(value, step);
+		value += min;
+		return value;
+	},
 
-		_knobDragMove: function(x, y)
-		{
-			var barPos = this._documentToSliderElementPosition( x, y, 'barElement');
-			if ( !barPos )
-				return;
-			var barPosX = barPos[0];
-			//var barPosY = barPos[1];
-			var knobPos = barPosX - this.state.knobDragPointX;
-			if ( knobPos<0 )
-				knobPos = 0;
-			else if ( knobPos>this.props.barWidth )
-				knobPos = this.props.barWidth;
-			this.setState( {knobPosition:knobPos });
+	_roundValueTo: function _roundValueTo(value, step) {
+		var n = Math.round(value / step);
+		var v = n * step;
+		return v;
+	},
 
-			var sliderValue = this._getSliderValue( knobPos );
-			if ( this.props.onKnobDragMove )
-				this.props.onKnobDragMove(sliderValue);
-		},
-		
-		_knobDragEnd: function(x, y)
-		{
-			this.setState( {knobDragPointX:0, knobDragPointY:0 });
+	_documentToSliderElementPosition: function _documentToSliderElementPosition(x, y, sliderElementRefName) {
+		var sliderElement = React.findDOMNode(this.refs[sliderElementRefName]);
+		if (!sliderElement) return null;
+		var rect = sliderElement.getBoundingClientRect();
+		var sliderElementX = x - rect.left;
+		var sliderElementY = y - rect.top;
+		return [sliderElementX, sliderElementY];
+	},
 
-			var sliderValue = this._getSliderValue( this.state.knobPosition );
-			if ( this.props.onKnobDragEnd )
-				this.props.onKnobDragEnd(sliderValue);
-		},
+	_knobDragStart: function _knobDragStart(x, y) {
+		var knobPos = this._documentToSliderElementPosition(x, y, 'knobElement');
+		if (!knobPos) return;
+		var knobPosX = knobPos[0] - this.props.knobWidth / 2;
+		var knobPosY = knobPos[1] - this.props.knobHeight / 2;
+		this.setState({ knobDragPointX: knobPosX, knobDragPointY: knobPosY }); // The position is relative to the knob center
+	},
 
-		_onKnobMouseDown: function(e)
-		{	
-console.log('_onKnobMouseDown');
-			e.preventDefault();
-			e.stopPropagation();
+	_knobDragMove: function _knobDragMove(x, y) {
+		var barPos = this._documentToSliderElementPosition(x, y, 'barElement');
+		if (!barPos) return;
+		var barPosX = barPos[0];
+		//var barPosY = barPos[1];
+		var knobPos = barPosX - this.state.knobDragPointX;
+		if (knobPos < 0) knobPos = 0;else if (knobPos > this.props.barWidth) knobPos = this.props.barWidth;
+		this.setState({ knobPosition: knobPos });
 
-			document.addEventListener('mousemove', this._onDocumentMouseMove, true);
-			document.addEventListener('mouseup', this._onDocumentMouseUp, true);
+		var sliderValue = this._getSliderValue(knobPos);
+		if (this.props.onKnobDragMove) this.props.onKnobDragMove(sliderValue);
+	},
 
-			var x = e.clientX;
-			var y = e.clientY;
-			this._knobDragStart( x, y );
-		},
-		
-		_onDocumentMouseMove: function(e)
-		{
-console.log('_onDocumentMouseMove');
-			e.preventDefault();
-			e.stopPropagation();
+	_knobDragEnd: function _knobDragEnd(x, y) {
+		this.setState({ knobDragPointX: 0, knobDragPointY: 0 });
 
-			var x = e.clientX;
-			var y = e.clientY;
-			this._knobDragMove( x, y );
-		},
+		var sliderValue = this._getSliderValue(this.state.knobPosition);
+		if (this.props.onKnobDragEnd) this.props.onKnobDragEnd(sliderValue);
+	},
 
-		_onDocumentMouseUp: function(e)
-		{	
-console.log('_onDocumentMouseUp');
-			e.preventDefault();
-			e.stopPropagation();
-			
-			document.removeEventListener('mousemove', this._onDocumentMouseMove, true);
-			document.removeEventListener('mouseup', this._onDocumentMouseUp, true);
-			this._knobDragEnd();
-		},
+	_onKnobMouseDown: function _onKnobMouseDown(e) {
+		console.log('_onKnobMouseDown');
+		e.preventDefault();
+		e.stopPropagation();
 
-		_onBarMouseDown: function(e)
-		{
-console.log('_onBarMouseDown');
-			e.preventDefault();
-			e.stopPropagation();
-			
-			this.setState( {knobDragPointX:0, knobDragPointY:0 });
-			
-			var x = e.clientX;
-			var y = e.clientY;
-			this._knobDragMove( x, y );
+		document.addEventListener('mousemove', this._onDocumentMouseMove, true);
+		document.addEventListener('mouseup', this._onDocumentMouseUp, true);
 
-			document.addEventListener('mousemove', this._onDocumentMouseMove, true);
-			document.addEventListener('mouseup', this._onDocumentMouseUp, true);
-		},
+		var x = e.clientX;
+		var y = e.clientY;
+		this._knobDragStart(x, y);
+	},
 
-		_onKnobTouchStart: function(e)
-		{
-console.log('_onKnobTouchStart');
-			e.preventDefault();
-			e.stopPropagation();
+	_onDocumentMouseMove: function _onDocumentMouseMove(e) {
+		console.log('_onDocumentMouseMove');
+		e.preventDefault();
+		e.stopPropagation();
 
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragStart( x, y );
-		},
-		
-		_onKnobTouchMove: function(e)
-		{
-console.log('_onKnobTouchMove');
-			e.preventDefault();
-			e.stopPropagation();
+		var x = e.clientX;
+		var y = e.clientY;
+		this._knobDragMove(x, y);
+	},
 
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragMove( x, y );
-		},
+	_onDocumentMouseUp: function _onDocumentMouseUp(e) {
+		console.log('_onDocumentMouseUp');
+		e.preventDefault();
+		e.stopPropagation();
 
-		_onKnobTouchEnd: function(e)
-		{
-console.log('_onKnobTouchMove');
-			e.preventDefault();
-			e.stopPropagation();
+		document.removeEventListener('mousemove', this._onDocumentMouseMove, true);
+		document.removeEventListener('mouseup', this._onDocumentMouseUp, true);
+		this._knobDragEnd();
+	},
 
-			this._knobDragEnd();
-		},
+	_onBarMouseDown: function _onBarMouseDown(e) {
+		console.log('_onBarMouseDown');
+		e.preventDefault();
+		e.stopPropagation();
 
-		_onBarTouchStart: function(e)
-		{
-console.log('_onBarTouchStart');
-			e.preventDefault();
-			e.stopPropagation();
+		this.setState({ knobDragPointX: 0, knobDragPointY: 0 });
 
-			this.setState( {knobDragPointX:0, knobDragPointY:0 });
-			
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragMove( x, y );
-		},
+		var x = e.clientX;
+		var y = e.clientY;
+		this._knobDragMove(x, y);
 
-		_onBarTouchMove: function(e)
-		{
-console.log('_onBarTouchMove');
-			e.preventDefault();
-			e.stopPropagation();
+		document.addEventListener('mousemove', this._onDocumentMouseMove, true);
+		document.addEventListener('mouseup', this._onDocumentMouseUp, true);
+	},
 
-			var x = e.changedTouches[0].clientX;
-			var y = e.changedTouches[0].clientY;
-			this._knobDragMove( x, y );
-		},
+	_onKnobTouchStart: function _onKnobTouchStart(e) {
+		console.log('_onKnobTouchStart');
+		e.preventDefault();
+		e.stopPropagation();
 
-		_onBarTouchEnd: function(e)
-		{
-console.log('_onBarTouchEnd');
-			e.preventDefault();
-			e.stopPropagation();
-			this._knobDragEnd();
-		},
+		var x = e.changedTouches[0].clientX;
+		var y = e.changedTouches[0].clientY;
+		this._knobDragStart(x, y);
+	},
+
+	_onKnobTouchMove: function _onKnobTouchMove(e) {
+		console.log('_onKnobTouchMove');
+		e.preventDefault();
+		e.stopPropagation();
+
+		var x = e.changedTouches[0].clientX;
+		var y = e.changedTouches[0].clientY;
+		this._knobDragMove(x, y);
+	},
+
+	_onKnobTouchEnd: function _onKnobTouchEnd(e) {
+		console.log('_onKnobTouchMove');
+		e.preventDefault();
+		e.stopPropagation();
+
+		this._knobDragEnd();
+	},
+
+	_onBarTouchStart: function _onBarTouchStart(e) {
+		console.log('_onBarTouchStart');
+		e.preventDefault();
+		e.stopPropagation();
+
+		this.setState({ knobDragPointX: 0, knobDragPointY: 0 });
+
+		var x = e.changedTouches[0].clientX;
+		var y = e.changedTouches[0].clientY;
+		this._knobDragMove(x, y);
+	},
+
+	_onBarTouchMove: function _onBarTouchMove(e) {
+		console.log('_onBarTouchMove');
+		e.preventDefault();
+		e.stopPropagation();
+
+		var x = e.changedTouches[0].clientX;
+		var y = e.changedTouches[0].clientY;
+		this._knobDragMove(x, y);
+	},
+
+	_onBarTouchEnd: function _onBarTouchEnd(e) {
+		console.log('_onBarTouchEnd');
+		e.preventDefault();
+		e.stopPropagation();
+		this._knobDragEnd();
 	}
-);
-
+});

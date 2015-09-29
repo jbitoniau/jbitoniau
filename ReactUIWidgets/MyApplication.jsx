@@ -41,8 +41,22 @@ var MyApplication = React.createClass
 							knobImage='SliderKnob.png'
 							onKnobDragMove={this.onKnobDragMove}
 							onKnobDragEnd={this.onKnobDragEnd}>
-							
 						</UISlider>
+
+						<UIButton style={{flex:'none', backgroundColor:'magenta', width:64, height:64}}
+							title='TEST2'
+							image='ColorSwatchBackground.png'
+							colorSwatch='rgba(0, 255, 0, 0.6)'
+							colorSwatchMargin={8}
+							colorSwatchBorderRadius={16}
+							hoverImage='ButtonHover.png'
+							enabled={true}
+							toggleable = {false}
+
+							onPressed={this._onButtonPressed}
+							onReleased={this._onButtonReleased}
+							onClick={this._onButtonClick}
+							onToggled={this._onButtonToggled}/>
 					</div>
 				);
 		},

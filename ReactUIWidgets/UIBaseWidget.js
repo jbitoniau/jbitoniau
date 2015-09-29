@@ -1,42 +1,41 @@
 'use strict';
 
+var UIBaseWidget = React.createClass({
+	displayName: 'UIBaseWidget',
 
-var UIBaseWidget = React.createClass
-( 
-	{displayName: "UIBaseWidget",
+	render: function render() {
+		// Here you give your widget its default style, typically it's min
+		// and possibly max size, depending on the nature of the widget
+		var mainDivDefaultStyle = {
+			minHeight: 40,
+			minWidth: 40
+		};
 
-		render: function()
-		{
-			// Here you give your widget its default style, typically it's min 
-			// and possibly max size, depending on the nature of the widget
-			var mainDivDefaultStyle = {
-				minHeight:40,
-				minWidth:40,
-			};
+		// Then we override the default style with the user-defined one
+		var mainDivStyle = Object.assign(mainDivDefaultStyle, this.props.style);
 
-			// Then we override the default style with the user-defined one
-			var mainDivStyle = Object.assign( mainDivDefaultStyle, this.props.style);
-			
-			// Then we override the position and possibly some other properties...
-			mainDivStyle = Object.assign( mainDivStyle, 
-								{
-									position:'relative',
-									// Don't specify size here as it should be done via user-defined style
-									// as for any regular HTML/CSS element
-								} );
+		// Then we override the position and possibly some other properties...
+		mainDivStyle = Object.assign(mainDivStyle, {
+			position: 'relative'
+		});
 
-
-			return (
-				// The main div of the widget
-				React.createElement("div", {style: mainDivStyle}, 
-					React.createElement("div", {style: {position:'absolute', top:10, left:10, bottom:10, right:10, backgroundColor:'red'}}, 
-						"Widget!"
-					)
-				) );
-		}
-
+		// Don't specify size here as it should be done via user-defined style
+		// as for any regular HTML/CSS element
+		return(
+			// The main div of the widget
+			React.createElement(
+				'div',
+				{ style: mainDivStyle },
+				React.createElement(
+					'div',
+					{ style: { position: 'absolute', top: 10, left: 10, bottom: 10, right: 10, backgroundColor: 'red' } },
+					'Widget!'
+				)
+			)
+		);
 	}
-);
+
+});
 
 /*
 	width, height and image are required.

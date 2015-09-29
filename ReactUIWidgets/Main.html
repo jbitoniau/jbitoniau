@@ -21,12 +21,12 @@
 			display:flex; 
 			flex-direction:column;">
 
-			<div style="flex:1 1 auto; position:relative; background-color:rgba(255,0,0,0.2);">
+			<div style="flex:auto; position:relative; background-color:rgba(255,0,0,0.2);">
 				<div id="mainDiv" style="position:absolute; top:5px; left:5px; bottom:5px; right:5px;">
 				</div>
 			</div>
 	
-			<div style="flex:2 1 auto; position:relative; background-color:rgba(0,255,0,0.2);">
+			<div style="flex: auto; position:relative; background-color:rgba(0,255,0,0.2);">
 				<input type='button' value='clear' onClick='document.getElementById("UIDebuggableOutputElement").innerHTML=""'/>
 				<div style="position:absolute; top:15px; left:5px; bottom:5px; right:5px; overflow:scroll">
 					<pre id='UIDebuggableOutputElement'></pre>

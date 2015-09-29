@@ -19,29 +19,24 @@
 		<pre id='UIDebuggableOutputElement'></pre>
 	</div>
 */
-var UIDebuggable =
-{
-	componentWillMount: function() 
-	{
+'use strict';
+
+var UIDebuggable = {
+	componentWillMount: function componentWillMount() {
 		this.debugActive = false;
 	},
 
-	_setDebugActive : function( active )
-	{
+	_setDebugActive: function _setDebugActive(active) {
 		this.debugActive = active;
 	},
 
-	_log: function( message )
-	{
-		if ( !this.debugActive )
-			return;
+	_log: function _log(message) {
+		if (!this.debugActive) return;
 
 		var fullMessage = this.constructor.displayName + ': ' + message;
-		console.log( fullMessage )
+		console.log(fullMessage);
 
 		var element = document.getElementById('UIDebuggableOutputElement');
-		if ( element )
-			element.innerHTML += fullMessage + '\n';
+		if (element) element.innerHTML += fullMessage + '\n';
 	}
 };
-
