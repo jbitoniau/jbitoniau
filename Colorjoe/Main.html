@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>test</title>
+		
+		<style>
+		/*	div 
+			{
+				border:1px dotted grey;
+			}	*/		
+		</style>
+	
+	--	<link rel="stylesheet" type="text/css" href='colorjoe2/css/styles.css'> 
+		<link rel="stylesheet" type="text/css" href='colorjoe2/css/pygment_trac.css'>
+		<link rel="stylesheet" type="text/css" href='colorjoe2/css/iehacks.css'> 
+		<link rel="stylesheet" type="text/css" href='colorjoe2/css/colorjoe.css'> 
+		
+	</head>
+	
+	<body>
+		<div id='mycolorjoe'></div>
+		<button onClick="go()"/>Go</button>
+	</body>
+	
+	<script src='./colorjoe2/js/scale.fix.js'></script>
+    <script src='./colorjoe2/js/onecolor.js'></script>
+    <script src='./colorjoe2/dist/colorjoe.js'></script>
+  <!--  <script src='./colorjoe2/js/demo.js'></script> -->
+	
+		
+	<script>
+		function go()
+		{
+			var colorjoeDiv = document.getElementById('mycolorjoe');
+			//var joe = colorjoe.rgb(colorjoeDiv, '#FF00FF', []);
+			
+		/*	 colorjoe.rgb(colorjoeDiv, '#113c38', [
+                 'close',
+                 'currentColor',
+                 ['fields', {space: 'RGB', limit: 255, fix: 2}],
+                 'hex',
+                 'text',
+                 ['text', {text: 'param demo'}]]);
+*/
+	
+	    /*var cj = colorjoe.rgb(colorjoeDiv, 'red', [
+                          'close',
+                          'currentColor'
+    ]);*/
+
+			
+				colorjoe.hsl(colorjoeDiv, '#113c38', [
+							 'alpha',
+							 'currentColor',
+							 ['fields', {space: 'HSLA', limit: 100}],
+							 ['fields', {space: 'CMYKA', limit: 100}],
+							 'hex'
+				]).on('change', function(c) {
+					//hVal.innerHTML = 'Alpha: ' + c.alpha().toFixed(2);
+				}).update();
+		}
+		
+	</script>
+	
+</html>
