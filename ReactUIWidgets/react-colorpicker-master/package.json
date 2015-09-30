@@ -1,0 +1,49 @@
+{
+  "name": "react-colorpicker",
+  "version": "0.3.14",
+  "description": "Colorpicker for React",
+  "main": "pkg/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stayradiated/react-colorpicker"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "color",
+    "colour",
+    "picker",
+    "rgb",
+    "hsv",
+    "hsl",
+    "hex"
+  ],
+  "author": "George Czabania",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stayradiated/react-colorpicker/issues"
+  },
+  "homepage": "https://github.com/stayradiated/react-colorpicker",
+  "dependencies": {
+    "classnames": "^1.2.1",
+    "colr": "^1.2.1",
+    "react": "^0.13.2"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "gulp": "^3.8.11",
+    "gulp-autoprefixer": "^2.2.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-react": "^3.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^1.3.3",
+    "gulp-streamify": "^0.0.5",
+    "gulp-uglify": "^1.2.0",
+    "reactify": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.1.2"
+  }
+}

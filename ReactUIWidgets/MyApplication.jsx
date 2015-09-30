@@ -81,13 +81,25 @@ var MyApplication = React.createClass
 								padding:0 }}
 								value='More text here'/>
 
-						<UIColorPicker style={{
-								flex:'auto', 
-								backgroundColor:'magenta'}}/>
+						
+						<div style={{
+							flex:'auto',
+							position:'relative'}}>
+
+							 <ReactColorpicker
+							 	color='#FF00FF'
+								onChange={this._onColorPickerChange}/>
+						</div>
 					</div>
 				);
 		},
 
+/*
+	<UIColorPicker style={{
+								flex:'auto', 
+								backgroundColor:'magenta'}}/>
+
+*/
 	/*
 		<UIButton style={{flex:'auto', alignSelf:'flex-start', backgroundColor:'magenta', width:'100%'}}
 								image='ToolAddVoxel.png' 
@@ -105,6 +117,10 @@ var MyApplication = React.createClass
 							<UIBaseWidget style={{flex:'auto', backgroundColor:'magenta'}}/>
 
 	*/
+		_onColorPickerChange: function(e)
+		{
+
+		},
 
 		_onButtonPressed:function(e)
 		{

@@ -1,0 +1,19 @@
+body {
+  background: #eee;
+}
+
+body, input {
+  font-family: monaco, monospace;
+  font-size: 14px;
+}
+
+#container {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  bottom: 20%;
+  right: 10%;
+  box-shadow: 0 0 30px rgba(0,0,0,0.3);
+}
+
+@import './colorpicker';
