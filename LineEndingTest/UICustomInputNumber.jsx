@@ -1,6 +1,7 @@
 'use strict';
 
 // 1 - edited on Windows
+// 2 - edited on Ubuntu
 
 /*
 	UICustomInputNumber
